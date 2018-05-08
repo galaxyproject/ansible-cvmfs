@@ -189,3 +189,5 @@ cvmfs_upgrade_server: false
 # Install a setuid binary allowing unprivileged users to call `cvmfs_config wipecache` or `cvmfs_talk remount sync`?
 cvmfs_install_setuid_cvmfs_wipecache: no
 cvmfs_install_setuid_cvmfs_remount_sync: no
+
+cvmfs_srv_device: true

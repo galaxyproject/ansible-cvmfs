@@ -5,6 +5,7 @@
     dev: "{{ cvmfs_srv_device }}"
     force: no
     fstype: ext4
+  when: cvmfs_srv_device
 
 - name: Mount /srv
   mount:
@@ -12,6 +13,7 @@
     src: "{{ cvmfs_srv_device }}"
     fstype: ext4
     state: mounted
+  when: cvmfs_srv_device
 
 - name: Install CernVM-FS server and dependencies (yum)
   yum:
