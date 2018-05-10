@@ -5,6 +5,7 @@
     dev: "{{ cvmfs_srv_device }}"
     force: no
     fstype: ext4
+  when: cvmfs_srv_device
 
 - name: Mount /srv
   mount:
@@ -12,6 +13,7 @@
     src: "{{ cvmfs_srv_device }}"
     fstype: ext4
     state: mounted
+  when: cvmfs_srv_device
 
 - name: Install CernVM-FS server and dependencies (yum)
   yum:
@@ -68,6 +70,24 @@
     backup: yes
   notify:
     - restart squid
+
+- name: Fix cache directory permission
+  file:
+    path: "{{ cvmfs_stratum1_cache_dir.dir }}"
+    owner: squid
+    group: squid
+    mode: 0755
+    state: directory
+    setype: squid_cache_t
+  when: cvmfs_stratum1_cache_dir is defined
+
+- name: Create the cache directories for the first time
+  become: true
+  become_user: squid
+  command: squid -z
+  args:
+    creates: "{{ cvmfs_stratum1_cache_dir }}/00"
+  when: cvmfs_stratum1_cache_dir is defined
 
 - name: Ensure squid is enabled and started
   service:

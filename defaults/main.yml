@@ -228,3 +228,10 @@ cvmfs_upgrade_server: false
 # Install a setuid binary allowing unprivileged users to call `cvmfs_config wipecache` or `cvmfs_talk remount sync`?
 cvmfs_install_setuid_cvmfs_wipecache: no
 cvmfs_install_setuid_cvmfs_remount_sync: no
+
+cvmfs_srv_device: true
+
+# Setup an optional cache directory for squid. Otherwise in-memory cache is used.
+# cvmfs_stratum1_cache_dir:
+#   dir: /var/cache/squid
+#   size: 1024 # 1 GB
