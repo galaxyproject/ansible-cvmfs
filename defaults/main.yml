@@ -134,6 +134,40 @@ cvmfs_keys:
       uFjvHWE2X2fDmvvmxaKEdTq5Ip0TK41f0H2cyTROn0ofRjx3wp8KjX0D2JJqZIau
       s6bKTTm3lyDf0+etkpE8J3TPbbSB/Ut+PCl8Efbzup1hmFpGZz/B89L9xi7+/w==
       -----END CERTIFICATE-----
+  - path: /etc/cvmfs/keys/singularity.galaxyproject.org.pub
+    owner: root
+    key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt977djqKnD4WbYNq8VtU
+      v9b8BgFzo1wh8rEUdj/2W9IvLXr5iWRrk1OvyZugYGxUg2JSVxiSXJhP1m8uBfBG
+      aX2jn4iAq1suuIxJ6UMO+SYR/9yUANY/JKvfI9qHN9ItXxYveRXwORWb6s3zyCm3
+      FFTRTUVQ5NFC+yT13BeIKyLMhT8yMSnlZ/5f8kuwSC1v/2QcC6UWDrHaUcEGWcHS
+      EfiTov/pVXq0Hv3M2kwBWMqWeFey4WbnuNOCXYrYy9VCxmPAtO0TjFuThMr9XyWc
+      Zu859ZLVjmkMxPxEPNxgNnc+DohK5wFPt7MHSejvCmd1J8iL4DOXUN2VvgJ9NrUN
+      hwIDAQAB
+      -----END PUBLIC KEY-----
+  - path: /etc/cvmfs/keys/singularity.galaxyproject.org.crt
+    owner: root
+    key: |
+      -----BEGIN CERTIFICATE-----
+      MIIDAjCCAeoCCQD7gQ6vXswQHDANBgkqhkiG9w0BAQsFADBDMUEwPwYDVQQDDDhz
+      aW5ndWxhcml0eS5nYWxheHlwcm9qZWN0Lm9yZyBDZXJuVk0tRlMgUmVsZWFzZSBN
+      YW5hZ2VyczAeFw0xODA1MTAxMjEyMzdaFw0xOTA1MTAxMjEyMzdaMEMxQTA/BgNV
+      BAMMOHNpbmd1bGFyaXR5LmdhbGF4eXByb2plY3Qub3JnIENlcm5WTS1GUyBSZWxl
+      YXNlIE1hbmFnZXJzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7mlC
+      I6xxdekF0JTGi/wzBh5TVsm7JRZWZ7fRr7zE+WyxOGAD1qKckchqN168xd4a/7Rb
+      BRt5jGozziuPk86CjfP2C0B/KxPdNuD/ffBKPVBbEqkmMgv0YN2ycFLVIkg0HkAa
+      TGidRljIpGqQRFdjCNXNHnkax+mCU1+wxR9GfNR0HVO7G4PK57b279oZPotIn4h4
+      yBfhJrNZG2v9fdVfXT1188Pc98IUhrWjZQc/HjTRn+1i/NO8TJ8P76hC0nGlg4Ks
+      JxM42Onf2a9EeuJCdwgbwh7zzUdthCCOtOf0GCHchkhUXgO8qk3AKgYBGEJFexEE
+      ogJzRE8D+24seye8MQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQAC1yKa2CHQnmmC
+      K5UXqYYN3eSWXB1KNiBzpKVDNvqqe6oVXKW4eDXZOmoSf5xeVxL5424fqp+ZHEH0
+      HoL4e1/GofbYtw382zEeeT4LHgDQ3gsAX18hQJK0k4M5YHIDDWHBpLBvBrzv4kyQ
+      i3u7qvXAUBb40eINU/4LdCsHMhxBwUS1hymc/ugG77uUTcw2UlkuRlTgqleFYeqE
+      ehwMznbk6ldXB03sf9+idJKzegHD8Hgol1odof/3IGt3hBBIRY8wdQJ7Fd65Svf7
+      br7UXF4V9HUbq5OYwhKVS58wtSMcn4nAmhuiA9qna9Yf6k8XzJYeVP1Z4vCal6L1
+      BDIF5yII
+      -----END CERTIFICATE-----
 
 cvmfs_private_keys: []
 
@@ -166,6 +200,11 @@ cvmfs_repositories:
   - repository: sandbox.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
     owner: sandbox
+    server_options: []
+    client_options: []
+  - repository: singularity.galaxyproject.org
+    stratum0: cvmfs0-psu0.galaxyproject.org
+    owner: singularity
     server_options: []
     client_options: []
 
