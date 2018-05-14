@@ -62,13 +62,13 @@
   when: ansible_os_family == "RedHat"
 
 - include: client.yml
-  when: "'cvmfsclients' in group_names"
+  when: "'cvmfsclients' in group_names or cvmfs_role == 'client'"
 
 - include: stratum1.yml
-  when: "'cvmfsstratum1servers' in group_names"
+  when: "'cvmfsstratum1servers' in group_names or cvmfs_role == 'stratum1'"
 
 - include: stratum0.yml
-  when: "'cvmfsstratum0servers' in group_names"
+  when: "'cvmfsstratum0servers' in group_names or cvmfs_role == 'stratum0'"
 
 - include: localproxy.yml
-  when: "'cvmfslocalproxies' in group_names"
+  when: "'cvmfslocalproxies' in group_names or cvmfs_role == 'localproxy'"
