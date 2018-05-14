@@ -235,3 +235,7 @@ cvmfs_srv_device: true
 # cvmfs_stratum1_cache_dir:
 #   dir: /var/cache/squid
 #   size: 1024 # 1 GB
+
+# You can manually specify a role if you don't want to or cannot use the
+# group_names
+# cvmfs_role: 'client' # (Or stratum1 or stratum0 or localproxy)
