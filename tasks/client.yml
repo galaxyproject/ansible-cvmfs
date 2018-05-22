@@ -26,11 +26,18 @@
   ignore_errors: yes
   register: cvmfs_config_chksetup_out
 
+- name: Ensure AutoFS is enabled + running
+  service:
+    name: autofs
+    enabled: yes
+    state: started
+
 - name: Perform AutoFS and FUSE configuration for CernVM-FS
   command: cvmfs_config setup
   notify:
     - reload autofs
-  when: not cvmfs_config_chksetup_out | success
+  args:
+    creates: /etc/auto.master.d/cvmfs.autofs
 
 - name: Configure CernVM-FS domain
   copy:
