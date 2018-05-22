@@ -27,7 +27,7 @@
   register: cvmfs_config_chksetup_out
 
 - name: Ensure AutoFS is enabled + running
-  systemd:
+  service:
     name: autofs
     enabled: yes
     state: started
