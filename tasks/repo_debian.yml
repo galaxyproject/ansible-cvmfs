@@ -1,0 +1,18 @@
+---
+
+- name: Install apt dependencies
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: Configure CernVM apt repository
+  apt_repository:
+    filename: "cernvm.list"
+    mode: 422
+    repo: https://cvmrepo.web.cern.ch/cvmrepo/apt/
+
+- name: Install CernVM apt key
+  apt_key:
+    url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
