@@ -1,7 +1,47 @@
 ---
 # defaults file for galaxyproject.cvmfs
 
-cvmfs_keys:
+cvmfs_keys: []
+cvmfs_private_keys: []
+cvmfs_server_urls: []
+cvmfs_repositories: []
+cvmfs_http_proxies:
+  - DIRECT
+cvmfs_stratum1_servers: []
+
+cvmfs_stratum1_apache_port: 8008
+cvmfs_stratum1_cache_mem: 128 #MB
+
+# Whether the client or server should be upgraded or just installed if missing
+cvmfs_upgrade_client: false
+cvmfs_upgrade_server: false
+
+# Install a setuid binary allowing unprivileged users to call `cvmfs_config wipecache` or `cvmfs_talk remount sync`?
+cvmfs_install_setuid_cvmfs_wipecache: no
+cvmfs_install_setuid_cvmfs_remount_sync: no
+
+# Block device to mkfs/mount on stratum1s
+cvmfs_srv_device: true
+
+# Setup an optional cache directory for squid. Otherwise in-memory cache is used.
+# cvmfs_stratum1_cache_dir:
+#   dir: /var/cache/squid
+#   size: 1024 # 1 GB
+
+# You can manually specify a role if you don't want to or cannot use the
+# group_names
+cvmfs_role: '' # (client, Or stratum1 or stratum0 or localproxy)
+
+
+#
+# Galaxy-specific stuff follows
+#
+
+# Automatically configure Galaxy CVMFS repos
+galaxy_cvmfs_repos_enabled: false
+
+# Defaults for galaxyproject.org repos
+galaxy_cvmfs_keys:
   - path: /etc/cvmfs/keys/test.galaxyproject.org.pub
     owner: g2test
     key: |
@@ -169,16 +209,14 @@ cvmfs_keys:
       BDIF5yII
       -----END CERTIFICATE-----
 
-cvmfs_private_keys: []
-
-cvmfs_server_urls:
+galaxy_cvmfs_server_urls:
   - domain: galaxyproject.org
     urls:
-      - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
-      - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
       - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
+      - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
+      - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
 
-cvmfs_repositories:
+galaxy_cvmfs_repositories:
   - repository: test.galaxyproject.org
     stratum0: cvmfs0-tacc0.galaxyproject.org
     owner: g2test
@@ -207,35 +245,3 @@ cvmfs_repositories:
     owner: singularity
     server_options: []
     client_options: []
-
-
-cvmfs_http_proxies:
-  - DIRECT
-
-cvmfs_stratum1_servers:
-  - "cvmfs1-tacc0.galaxyproject.org"
-  - "cvmfs1-iu0.galaxyproject.org"
-  - "cvmfs1-psu0.galaxyproject.org"
-
-cvmfs_stratum1_apache_port: 8008
-# in MB
-cvmfs_stratum1_cache_mem: 128
-
-# Whether the client or server should be upgraded or just installed if missing
-cvmfs_upgrade_client: false
-cvmfs_upgrade_server: false
-
-# Install a setuid binary allowing unprivileged users to call `cvmfs_config wipecache` or `cvmfs_talk remount sync`?
-cvmfs_install_setuid_cvmfs_wipecache: no
-cvmfs_install_setuid_cvmfs_remount_sync: no
-
-cvmfs_srv_device: true
-
-# Setup an optional cache directory for squid. Otherwise in-memory cache is used.
-# cvmfs_stratum1_cache_dir:
-#   dir: /var/cache/squid
-#   size: 1024 # 1 GB
-
-# You can manually specify a role if you don't want to or cannot use the
-# group_names
-cvmfs_role: '' # (client, Or stratum1 or stratum0 or localproxy)
