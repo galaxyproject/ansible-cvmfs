@@ -30,7 +30,7 @@ cvmfs_install_setuid_cvmfs_wipecache: no
 cvmfs_install_setuid_cvmfs_remount_sync: no
 
 # Block device to mkfs/mount on stratum0s/stratum1s
-cvmfs_srv_device: false
+#cvmfs_srv_device: false
 cvmfs_srv_mount: /srv
 
 cvmfs_union_fs: overlayfs
@@ -122,28 +122,33 @@ galaxy_cvmfs_repositories:
   - repository: test.galaxyproject.org
     stratum0: cvmfs0-tacc0.galaxyproject.org
     owner: g2test
+    key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options:
       - CVMFS_AUTO_GC=false
     client_options: []
   - repository: main.galaxyproject.org
     stratum0: cvmfs0-tacc0.galaxyproject.org
     owner: g2main
+    key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options:
       - CVMFS_AUTO_GC=false
     client_options: []
   - repository: data.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
     owner: g2test
+    key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options:
       - CVMFS_AUTO_GC=false
     client_options: []
   - repository: sandbox.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
     owner: sandbox
+    key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options: []
     client_options: []
   - repository: singularity.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
     owner: singularity
+    key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options: []
     client_options: []

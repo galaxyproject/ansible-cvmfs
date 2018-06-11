@@ -36,7 +36,7 @@
   when: cvmfs_manage_firewall
 
 - name: Ensure replicas are configured
-  command: /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }} http://{{ item.stratum0 }}/cvmfs/{{ item.repository }} /etc/cvmfs/keys/{{ item.repository }}.pub
+  command: /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }} http://{{ item.stratum0 }}/cvmfs/{{ item.repository }} {{ item.key_dir | default('/etc/cvmfs/keys') }}/{{ item.repository }}.pub
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
