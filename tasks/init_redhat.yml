@@ -62,4 +62,4 @@
   yum:
     name: "{{ item }}"
     state: "{{ 'latest' if cvmfs_upgrade_server else 'present' }}"
-  with_items: "{{ cvmfs_packages[cvmfs_role] }}"
+  with_items: "{{ cvmfs_packages[_cvmfs_role] }}"

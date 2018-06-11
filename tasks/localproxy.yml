@@ -3,7 +3,7 @@
 - name: Include initial OS-specific tasks
   include: "init_{{ ansible_os_family | lower}}.yml"
   vars:
-    cvmfs_role: localproxy
+    _cvmfs_role: localproxy
 
 - name: Include squid tasks
   include: squid.yml

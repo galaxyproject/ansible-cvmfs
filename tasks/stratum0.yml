@@ -7,7 +7,7 @@
 - name: Include initial OS-specific tasks
   include: "init_{{ ansible_os_family | lower }}.yml"
   vars:
-    cvmfs_role: stratum0
+    _cvmfs_role: stratum0
 
 - name: Include key setup tasks
   include: keys.yml
