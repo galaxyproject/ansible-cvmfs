@@ -8,17 +8,15 @@
 
 - name: restart squid
   service:
-    name: squid
+    name: "{{ cvmfs_squid_service_name }}"
     state: restarted
 
 - name: restart apache
   service:
-    # FIXME: RHEL-specific
-    name: httpd
+    name: "{{ cvmfs_apache_service_name }}"
     state: restarted
 
 - name: reload apache
   service:
-    # FIXME: RHEL-specific
-    name: httpd
+    name: "{{ cvmfs_apache_service_name }}"
     state: reloaded

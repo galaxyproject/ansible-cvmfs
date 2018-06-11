@@ -57,3 +57,9 @@
     owner: "root"
     group: "root"
     mode: "0644"
+
+- name: Install CernVM-FS packages and dependencies (yum)
+  yum:
+    name: "{{ item }}"
+    state: "{{ 'latest' if cvmfs_upgrade_server else 'present' }}"
+  with_items: "{{ cvmfs_packages[cvmfs_role] }}"

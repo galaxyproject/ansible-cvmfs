@@ -1,0 +1,23 @@
+---
+
+cvmfs_apache_service_name: apache2
+cvmfs_apache_conf_file: /etc/apache2/apache2.conf
+
+cvmfs_squid_service_name: squid
+cvmfs_squid_conf_file: /etc/squid/squid.conf
+cvmfs_squid_user: proxy
+cvmfs_squid_group: proxy
+
+cvmfs_packages:
+  stratum0:
+    - apache2
+    - cvmfs-server
+    - cvmfs-config-default
+  stratum1:
+    - apache2
+    - cvmfs-server
+    - cvmfs-config-default
+  localproxy:
+    - squid
+  client:
+    - cvmfs

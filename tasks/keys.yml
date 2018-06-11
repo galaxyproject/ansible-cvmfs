@@ -1,0 +1,19 @@
+---
+
+- name: Make CernVM-FS key directories
+  file:
+    state: directory
+    path: "{{ item.path | dirname }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items: "{{ cvmfs_keys }}"
+
+- name: Install CernVM-FS keys
+  copy:
+    content: "{{ item.key }}"
+    dest: "{{ item.path }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: root
+    mode: 0444
+  with_items: "{{ cvmfs_keys }}"

@@ -1,0 +1,10 @@
+---
+
+- name: Set repository {{ _cvmfs_repo_option_key }} options
+  lineinfile:
+    dest: "/etc/cvmfs/repositories.d/{{ item.0.repository }}/{{ _cvmfs_repo_option_key }}.conf"
+    regexp: "^{{ item.1.split('=')[0] }}=.*"
+    line: "{{ item.1 }}"
+  with_subelements:
+    - "{{ cvmfs_repositories }}"
+    - "{{ _cvmfs_repo_option_key }}_options"

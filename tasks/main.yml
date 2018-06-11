@@ -1,19 +1,15 @@
 ---
 # tasks file for galaxyproject.cvmfs
 
-- name: Prepare yum for CernVM installation
-  include: repo_redhat.yml
-  when: ansible_os_family == "RedHat"
-
-- name: Prepare apt for CernVM installation
-  include: repo_debian.yml
-  when: ansible_os_family == "Debian"
+- name: Set OS-specific variables
+  include_vars: "{{ ansible_os_family | lower }}.yml"
 
 - name: Set facts for Galaxy CVMFS repositories, if enabled
   set_fact:
     cvmfs_keys: "{{ cvmfs_keys }} + {{ galaxy_cvmfs_keys }}"
     cvmfs_server_urls: "{{ cvmfs_server_urls }} + {{ galaxy_cvmfs_server_urls }}"
     cvmfs_repositories: "{{ cvmfs_repositories }} + {{ galaxy_cvmfs_repositories }}"
+    cvmfs_config_apache_flag: "{{ '-p' if not cvmfs_config_apache else '' }}"
   when: galaxy_cvmfs_repos_enabled
 
 - include: client.yml

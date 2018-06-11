@@ -7,7 +7,16 @@ cvmfs_server_urls: []
 cvmfs_repositories: []
 cvmfs_http_proxies:
   - DIRECT
-cvmfs_stratum1_servers: []
+
+cvmfs_manage_firewall: false
+
+cvmfs_stratum0_http_ports:
+  - 80
+cvmfs_stratum1_http_ports:
+  - 80
+  - 8000
+cvmfs_localproxy_http_ports:
+  - 3128
 
 cvmfs_stratum1_apache_port: 8008
 cvmfs_stratum1_cache_mem: 128 #MB
@@ -20,8 +29,12 @@ cvmfs_upgrade_server: false
 cvmfs_install_setuid_cvmfs_wipecache: no
 cvmfs_install_setuid_cvmfs_remount_sync: no
 
-# Block device to mkfs/mount on stratum1s
-cvmfs_srv_device: true
+# Block device to mkfs/mount on stratum0s/stratum1s
+cvmfs_srv_device: false
+cvmfs_srv_mount: /srv
+
+cvmfs_union_fs: overlayfs
+cvmfs_config_apache: true
 
 # Setup an optional cache directory for squid. Otherwise in-memory cache is used.
 # cvmfs_stratum1_cache_dir:
@@ -43,7 +56,6 @@ galaxy_cvmfs_repos_enabled: false
 # Defaults for galaxyproject.org repos
 galaxy_cvmfs_keys:
   - path: /etc/cvmfs/keys/galaxyproject.org/test.galaxyproject.org.pub
-    owner: g2test
     key: |
       -----BEGIN PUBLIC KEY-----
       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtfc5SSX9ALcrukWYcxkI
@@ -55,7 +67,6 @@ galaxy_cvmfs_keys:
       PwIDAQAB
       -----END PUBLIC KEY-----
   - path: /etc/cvmfs/keys/galaxyproject.org/data.galaxyproject.org.pub
-    owner: g2test
     key: |
       -----BEGIN PUBLIC KEY-----
       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5LHQuKWzcX5iBbCGsXGt
@@ -67,7 +78,6 @@ galaxy_cvmfs_keys:
       owIDAQAB
       -----END PUBLIC KEY-----
   - path: /etc/cvmfs/keys/galaxyproject.org/main.galaxyproject.org.pub
-    owner: g2main
     key: |
       -----BEGIN PUBLIC KEY-----
       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6S6Tugcv4kk4C06f574l
@@ -79,7 +89,6 @@ galaxy_cvmfs_keys:
       OQIDAQAB
       -----END PUBLIC KEY-----
   - path: /etc/cvmfs/keys/galaxyproject.org/sandbox.galaxyproject.org.pub
-    owner: root
     key: |
       -----BEGIN PUBLIC KEY-----
       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1jHnrwsxMUkMZDAj9GMt
@@ -91,7 +100,6 @@ galaxy_cvmfs_keys:
       YwIDAQAB
       -----END PUBLIC KEY-----
   - path: /etc/cvmfs/keys/galaxyproject.org/singularity.galaxyproject.org.pub
-    owner: root
     key: |
       -----BEGIN PUBLIC KEY-----
       MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt977djqKnD4WbYNq8VtU
