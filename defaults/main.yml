@@ -239,3 +239,6 @@ cvmfs_srv_device: true
 # You can manually specify a role if you don't want to or cannot use the
 # group_names
 cvmfs_role: '' # (client, Or stratum1 or stratum0 or localproxy)
+# Optionally download the preload utilit
+cvmfs_preload_install: false
+cvmfs_preload_path: /usr/bin
