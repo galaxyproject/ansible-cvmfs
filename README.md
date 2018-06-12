@@ -31,6 +31,8 @@ variable | type | description
 `cvmfs_repositories` | list of dicts | CVMFS repository configurations, the value of `CVMFS_REPOSITORIES` in `/etc/cvmfs/default.local` plus additional settings in `/etc/cvmfs/repositories.d/<repository>/{client,server}.conf`.
 `cvmfs_quota_limit` | integer in MB | Size of CVMFS client cache. Default is `4000`.
 `cvmfs_upgrade_client` | boolean | Upgrade CVMFS on clients to the latest version if it is already installed. Default is `false`.
+`cvmfs_preload_install` | boolean | Install the `cvmfs_preload` script for [preloading the CVMFS cache][preload].
+`cvmfs_preload_path` | path | Directory where `cvmfs_preload` should be installed
 `cvmfs_install_setuid_cvmfs_wipecache` | boolean | Install a setuid binary on clients that allows unprivileged users to perform `cvmfs_config wipecache`. EL only (source is provided).
 `cvmfs_install_setuid_cvmfs_remount_sync` | boolean | Install a setuid binary on clients that allows unprivileged users to perform `cvmfs_talk remount sync`. EL only (source is provided).
 
@@ -85,6 +87,7 @@ Additionally, setting the boolean `galaxy_cvmfs_repos_enabled` to `true` will au
 and `cvmfs_repositories` by prepending `galaxy_` to the variable names. See the [defaults][defaults] for details.
 
 [defaults]: https://github.com/galaxyproject/ansible-cvmfs/blob/master/defaults/main.yml
+[preload]: http://cvmfs.readthedocs.io/en/stable/cpt-hpc.html
 
 Dependencies
 ------------
