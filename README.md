@@ -25,6 +25,7 @@ All variables are optional. However, if unset, the role will essentially do noth
 ## Client or shared client/server variables
 
 variable | type | description
+--- | --- | ---
 `cvmfs_role` | string | Type of CVMFS host: `client`, `stratum0`, `stratum1`, or `localproxy`. Alternatively, you may put hosts in to groups `cvmfsclients`, `cvmfsstratum0servers`, `cvmfsstratum1servers`, and `cvmfslocalproxies`. Controls what packages are installed and what configuration is performed.
 `cvmfs_keys` | list of dicts | Keys to install on hosts of all types.
 `cvmfs_server_urls` | list of dicts | CVMFS server URLs, the value of `CVMFS_SERVER_URL` in `/etc/cvmfs/domain.d/<domain>.conf`.
@@ -65,6 +66,7 @@ cvmfs_repositories:
 ## Server variables
 
 variable | type | description
+--- | --- | ---
 `cvmfs_private_keys` | list of dicts | Keys to install on Stratum 0 hosts. Separate from `cvmfs_keys` for vaultability and avoiding duplication.
 `cvmfs_config_apache` | boolean | Configure Apache on Stratum 0 and 1 servers. If disabled, you must configure it yourself. Default is `true`.
 `cvmfs_manage_firewall` | boolean | Attempt to configure firewalld (EL) or ufw (Debian) to permit traffic to configured ports. Default is `false`.
