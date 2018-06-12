@@ -4,6 +4,7 @@
   include_tasks: "init_{{ ansible_os_family | lower}}.yml"
   vars:
     _cvmfs_role: stratum1
+    _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
 
 - name: Include key setup tasks
   include_tasks: keys.yml

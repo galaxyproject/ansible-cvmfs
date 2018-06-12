@@ -4,6 +4,7 @@
   include_tasks: "init_{{ ansible_os_family | lower}}.yml"
   vars:
     _cvmfs_role: client
+    _cvmfs_upgrade: "{{ cvmfs_upgrade_client }}"
 
 - name: Include key setup tasks
   include_tasks: keys.yml
@@ -38,7 +39,7 @@
     mode: 0644
   with_items: "{{ cvmfs_server_urls }}"
 
-- name: Configure CernVM-FS client settings
+- name: Configure CernVM-FS global client settings
   copy:
     content: |
       CVMFS_REPOSITORIES="{%- for repo in cvmfs_repositories -%}{{ ',' if loop.index0 > 0 else '' }}{{ repo.repository }}{%- endfor -%}"
@@ -48,6 +49,11 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Include repository client options tasks
+  include_tasks: options.yml
+  vars:
+    _cvmfs_repo_option_key: client
 
 - name: Install cvmfs_wipecache setuid binary
   copy:

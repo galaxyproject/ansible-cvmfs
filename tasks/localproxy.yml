@@ -4,6 +4,7 @@
   include_tasks: "init_{{ ansible_os_family | lower}}.yml"
   vars:
     _cvmfs_role: localproxy
+    _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
 
 - name: Include squid tasks
   include_tasks: squid.yml

@@ -61,5 +61,5 @@
 - name: Install CernVM-FS packages and dependencies (yum)
   yum:
     name: "{{ item }}"
-    state: "{{ 'latest' if cvmfs_upgrade_server else 'present' }}"
+    state: "{{ 'latest' if _cvmfs_upgrade else 'present' }}"
   with_items: "{{ cvmfs_packages[_cvmfs_role] }}"

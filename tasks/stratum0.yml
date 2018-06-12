@@ -8,6 +8,7 @@
   include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
     _cvmfs_role: stratum0
+    _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
 
 - name: Include key setup tasks
   include_tasks: keys.yml
@@ -42,7 +43,7 @@
     - restart apache
 
 - name: Ensure repositories are imported
-  command: /usr/bin/cvmfs_server import -r {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f overlayfs {{ item.repository }}
+  command: /usr/bin/cvmfs_server import -r {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
@@ -54,7 +55,7 @@
   vars:
     _cvmfs_repo_option_key: server
 
-- name: Include repository server options tasks
+- name: Include repository client options tasks
   include_tasks: options.yml
   vars:
     _cvmfs_repo_option_key: client

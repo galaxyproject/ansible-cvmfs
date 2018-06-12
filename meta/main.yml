@@ -35,18 +35,12 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-      - 6
-      - 7
-  # - name: Fedora
-  #   versions:
-  #   - all
-  #   - 25
-  # - name: SomePlatform
-  #   versions:
-  #   - all
-  #   - 1.0
-  #   - 7
-  #   - 99.99
+        - 6
+        - 7
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
 
   galaxy_tags:
     - system
