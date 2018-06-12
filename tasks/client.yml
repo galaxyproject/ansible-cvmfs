@@ -1,12 +1,12 @@
 ---
 
 - name: Include initial OS-specific tasks
-  include: "init_{{ ansible_os_family | lower}}.yml"
+  include_tasks: "init_{{ ansible_os_family | lower}}.yml"
   vars:
     _cvmfs_role: client
 
 - name: Include key setup tasks
-  include: keys.yml
+  include_tasks: keys.yml
 
 - name: Check CernVM-FS for setup
   command: cvmfs_config chksetup

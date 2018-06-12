@@ -1,12 +1,12 @@
 ---
 
 - name: Include initial OS-specific tasks
-  include: "init_{{ ansible_os_family | lower}}.yml"
+  include_tasks: "init_{{ ansible_os_family | lower}}.yml"
   vars:
     _cvmfs_role: localproxy
 
 - name: Include squid tasks
-  include: squid.yml
+  include_tasks: squid.yml
   vars:
     _cvmfs_squid_conf_src: "{{ cvmfs_squid_conf_src | default('localproxy_squid.conf.j2') }}"
 
@@ -20,7 +20,7 @@
 #    - restart squid
 
 - name: Include firewall tasks
-  include: firewall.yml
+  include_tasks: firewall.yml
   vars:
     _cvmfs_http_ports: "{{ cvmfs_http_ports | default(cvmfs_localproxy_http_ports) }}"
   when: cvmfs_manage_firewall

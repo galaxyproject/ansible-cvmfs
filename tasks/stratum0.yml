@@ -5,12 +5,12 @@
 # w/ xfs /tmp).
 
 - name: Include initial OS-specific tasks
-  include: "init_{{ ansible_os_family | lower }}.yml"
+  include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
     _cvmfs_role: stratum0
 
 - name: Include key setup tasks
-  include: keys.yml
+  include_tasks: keys.yml
 
 - name: Install CernVM-FS private keys
   copy:
@@ -22,13 +22,13 @@
   with_items: "{{ cvmfs_private_keys }}"
 
 - name: Include stratumN tasks
-  include: stratumN.yml
+  include_tasks: stratumN.yml
 
 - name: Include Apache tasks
-  include: apache.yml
+  include_tasks: apache.yml
 
 - name: Include firewall tasks
-  include: firewall.yml
+  include_tasks: firewall.yml
   vars:
     _cvmfs_http_ports: "{{ cvmfs_stratum0_http_ports }}"
   when: cvmfs_manage_firewall
@@ -50,12 +50,12 @@
     - restart apache
 
 - name: Include repository server options tasks
-  include: options.yml
+  include_tasks: options.yml
   vars:
     _cvmfs_repo_option_key: server
 
 - name: Include repository server options tasks
-  include: options.yml
+  include_tasks: options.yml
   vars:
     _cvmfs_repo_option_key: client
 
@@ -80,4 +80,4 @@
     job: "/usr/bin/cvmfs_server resign {{ cvmfs_repositories | join(' ; /usr/bin/cvmfs_server resign ', attribute='repository' ) }}"
 
 - name: Include garbage collection tasks
-  include: gc.yml
+  include_tasks: gc.yml

@@ -12,14 +12,14 @@
     cvmfs_config_apache_flag: "{{ '-p' if not cvmfs_config_apache else '' }}"
   when: galaxy_cvmfs_repos_enabled
 
-- include: client.yml
+- include_tasks: client.yml
   when: "'cvmfsclients' in group_names or cvmfs_role == 'client'"
 
-- include: stratum1.yml
+- include_tasks: stratum1.yml
   when: "'cvmfsstratum1servers' in group_names or cvmfs_role == 'stratum1'"
 
-- include: stratum0.yml
+- include_tasks: stratum0.yml
   when: "'cvmfsstratum0servers' in group_names or cvmfs_role == 'stratum0'"
 
-- include: localproxy.yml
+- include_tasks: localproxy.yml
   when: "'cvmfslocalproxies' in group_names or cvmfs_role == 'localproxy'"

@@ -1,12 +1,12 @@
 ---
 
 - name: Include initial OS-specific tasks
-  include: "init_{{ ansible_os_family | lower}}.yml"
+  include_tasks: "init_{{ ansible_os_family | lower}}.yml"
   vars:
     _cvmfs_role: stratum1
 
 - name: Include key setup tasks
-  include: keys.yml
+  include_tasks: keys.yml
 
 - name: Change Apache listen port
   lineinfile:
@@ -19,18 +19,18 @@
     - reload apache
 
 - name: Include stratumN tasks
-  include: stratumN.yml
+  include_tasks: stratumN.yml
 
 - name: Include Apache tasks
-  include: apache.yml
+  include_tasks: apache.yml
 
 - name: Include squid tasks
-  include: squid.yml
+  include_tasks: squid.yml
   vars:
     _cvmfs_squid_conf_src: "{{ cvmfs_squid_conf_src | default('stratum1_squid.conf.j2') }}"
 
 - name: Include firewall tasks
-  include: firewall.yml
+  include_tasks: firewall.yml
   vars:
     _cvmfs_http_ports: "{{ cvmfs_http_ports | default(cvmfs_stratum1_http_ports) }}"
   when: cvmfs_manage_firewall
@@ -44,7 +44,7 @@
     - restart apache
 
 - name: Include repository server options tasks
-  include: options.yml
+  include_tasks: options.yml
   vars:
     _cvmfs_repo_option_key: server
 
@@ -67,7 +67,7 @@
     minute: "*/5"
 
 - name: Include garbage collection tasks
-  include: gc.yml
+  include_tasks: gc.yml
 
 # allow unprivileged users to restart squid
 - name: Allow users to manage services
