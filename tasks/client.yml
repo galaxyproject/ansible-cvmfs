@@ -84,3 +84,12 @@
     path: /usr/local/bin/cvmfs_remount_sync
     state: absent
   when: not cvmfs_install_setuid_cvmfs_remount_sync
+
+- name: Download cvmfs_preload utility when desired
+  get_url:
+    url: https://cvmrepo.web.cern.ch/cvmrepo/preload/cvmfs_preload
+    dest: "{{ cvmfs_preload_path }}/cvmfs_preload"
+    owner: root
+    group: root
+    mode: 755
+  when: cvmfs_preload_install

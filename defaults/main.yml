@@ -45,6 +45,9 @@ cvmfs_config_apache: true
 # group_names
 cvmfs_role: '' # (client, Or stratum1 or stratum0 or localproxy)
 
+# Optionally download the preload utility
+cvmfs_preload_install: false
+cvmfs_preload_path: /usr/bin
 
 #
 # Galaxy-specific stuff follows
