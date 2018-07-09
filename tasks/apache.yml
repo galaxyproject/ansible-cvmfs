@@ -1,0 +1,7 @@
+---
+
+- name: Ensure Apache is enabled and running
+  service:
+    name: "{{ cvmfs_apache_service_name }}"
+    state: started
+    enabled: yes

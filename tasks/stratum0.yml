@@ -4,36 +4,14 @@
 # fails if /tmp is xfs, although for some reason was fine on the PSU stratum 0
 # w/ xfs /tmp).
 
-- name: Install CernVM-FS server and dependencies (yum)
-  yum:
-    name: "{{ item }}"
-    state: "{{ 'latest' if cvmfs_upgrade_server else 'present' }}"
-  with_items:
-    - httpd
-    - cvmfs-server
-    - cvmfs-config-default
-    - cvmfs
-  when: ansible_os_family == "RedHat"
+- name: Include initial OS-specific tasks
+  include_tasks: "init_{{ ansible_os_family | lower }}.yml"
+  vars:
+    _cvmfs_role: stratum0
+    _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
 
-- name: Install CernVM-FS server and dependencies (apt)
-  apt:
-    name: "{{ item }}"
-    state: "{{ 'latest' if cvmfs_upgrade_server else 'present' }}"
-  with_items:
-    - apache2
-    - cvmfs-server
-    - cvmfs-config-default
-    - cvmfs
-  when: ansible_os_family == "Debian"
-
-- name: Install CernVM-FS keys
-  copy:
-    content: "{{ item.key }}"
-    dest: "{{ item.path }}"
-    owner: "root"
-    group: "root"
-    mode: "0444"
-  with_items: "{{ cvmfs_keys }}"
+- name: Include key setup tasks
+  include_tasks: keys.yml
 
 - name: Install CernVM-FS private keys
   copy:
@@ -44,71 +22,53 @@
     mode: "0400"
   with_items: "{{ cvmfs_private_keys }}"
 
-- name: Ensure Apache is enabled and running
-  service:
-    # FIXME: RHEL-specific
-    name: httpd
-    state: started
-    enabled: yes
+- name: Include stratumN tasks
+  include_tasks: stratumN.yml
 
-- name: Ensure Apache is not firewalled
-  # FIXME: RHEL-specific
-  firewalld:
-    service: http
-    state: enabled
-    permanent: yes
-    immediate: yes
-  # Some hosts may not be using firewalld
-  ignore_errors: true
+- name: Include Apache tasks
+  include_tasks: apache.yml
 
-- name: Ensure repositories exist for import
-  stat:
-    path: /srv/cvmfs/{{ item.repository }}
-  register: srv_cvmfs_repo_stat
+- name: Include firewall tasks
+  include_tasks: firewall.yml
+  vars:
+    _cvmfs_http_ports: "{{ cvmfs_stratum0_http_ports }}"
+  when: cvmfs_manage_firewall
+
+- name: Create repositories
+  command: /usr/bin/cvmfs_server mkfs {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
+  args:
+    creates: /srv/cvmfs/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
-  failed_when: not srv_cvmfs_repo_stat.stat.exists
+  notify:
+    - restart apache
 
 - name: Ensure repositories are imported
-  command: /usr/bin/cvmfs_server import -r -o {{ item.owner | default('root') }} -f aufs {{ item.repository }}
+  command: /usr/bin/cvmfs_server import -r {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
   notify:
     - restart apache
 
-- name: Set repository server options
-  lineinfile:
-    dest: "/etc/cvmfs/repositories.d/{{ item.0.repository }}/server.conf"
-    regexp: "^{{ item.1.split('=')[0] }}=.*"
-    line: "{{ item.1 }}"
-  with_subelements:
-    - "{{ cvmfs_repositories }}"
-    - server_options
+- name: Include repository server options tasks
+  include_tasks: options.yml
+  vars:
+    _cvmfs_repo_option_key: server
 
-- name: Set repository client options
-  lineinfile:
-    dest: "/etc/cvmfs/repositories.d/{{ item.0.repository }}/client.conf"
-    regexp: "^{{ item.1.split('=')[0] }}=.*"
-    line: "{{ item.1 }}"
-  with_subelements:
-    - "{{ cvmfs_repositories }}"
-    - client_options
+- name: Include repository client options tasks
+  include_tasks: options.yml
+  vars:
+    _cvmfs_repo_option_key: client
 
 - name: Increase default max file descriptor limit
   lineinfile:
     dest: "/etc/security/limits.conf"
     regexp: '^\*\s+{{ item }}\s+nofile\s+\d+$'
-    line: "*               {{ item }}    nofile          4096"
+    line: "*               {{ item }}    nofile          {{ cvmfs_numfiles }}"
   with_items:
     - soft
     - hard
-
-# This used to be necessary to work around https://github.com/moby/moby/issues/21748
-- name: Allow users to manage services
-  template:
-    src: 01-manage-units.rules.j2
-    dest: /etc/polkit-1/rules.d/01-manage-units.rules
-  when: cvmfs_manage_units_group is defined
+  when: cvmfs_numfiles is defined
 
 - name: Schedule key resignings
   cron:
@@ -120,13 +80,5 @@
     weekday: 2
     job: "/usr/bin/cvmfs_server resign {{ cvmfs_repositories | join(' ; /usr/bin/cvmfs_server resign ', attribute='repository' ) }}"
 
-- name: Schedule stratum0 garbage collection
-  cron:
-    name: cvmfs_gc_{{ item.1.repository }}
-    cron_file: ansible_cvmfs_stratum0_gc
-    user: "{{ item.1.owner | default('root') }}"
-    job: output=$(/usr/bin/cvmfs_server gc -f -t '1 Jan 1970 00:00:00' {{ item.1.repository }} 2>&1) || echo "$output"
-    hour: 3
-    minute: "{{ item.0 }}"
-    weekday: 3
-  with_indexed_items: "{{ cvmfs_repositories }}"
+- name: Include garbage collection tasks
+  include_tasks: gc.yml

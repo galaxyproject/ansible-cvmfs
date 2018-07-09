@@ -1,24 +1,13 @@
 ---
 
-- name: Install CernVM-FS client (yum)
-  yum:
-    name: cvmfs
-    state: "{{ 'latest' if cvmfs_upgrade_client else 'present' }}"
-  when: ansible_os_family == "RedHat"
+- name: Include initial OS-specific tasks
+  include_tasks: "init_{{ ansible_os_family | lower}}.yml"
+  vars:
+    _cvmfs_role: client
+    _cvmfs_upgrade: "{{ cvmfs_upgrade_client }}"
 
-- name: Install CernVM-FS client (apt)
-  apt:
-    name: cvmfs
-  when: ansible_os_family == "Debian"
-
-- name: Install CernVM-FS keys
-  copy:
-    content: "{{ item.key }}"
-    dest: "{{ item.path }}"
-    owner: "root"
-    group: "root"
-    mode: "0444"
-  with_items: "{{ cvmfs_keys }}"
+- name: Include key setup tasks
+  include_tasks: keys.yml
 
 - name: Check CernVM-FS for setup
   command: cvmfs_config chksetup
@@ -43,22 +32,28 @@
   copy:
     content: |
       CVMFS_SERVER_URL="{{ item.urls | join(';') }}"
-    dest: "/etc/cvmfs/domain.d/{{ item.domain }}.conf"
-    owner: "root"
-    group: "root"
-    mode: "0644"
+      CVMFS_KEYS_DIR=/etc/cvmfs/keys/{{ item.domain }}
+    dest: /etc/cvmfs/domain.d/{{ item.domain }}.conf
+    owner: root
+    group: root
+    mode: 0644
   with_items: "{{ cvmfs_server_urls }}"
 
-- name: Configure CernVM-FS client settings
+- name: Configure CernVM-FS global client settings
   copy:
     content: |
       CVMFS_REPOSITORIES="{%- for repo in cvmfs_repositories -%}{{ ',' if loop.index0 > 0 else '' }}{{ repo.repository }}{%- endfor -%}"
       CVMFS_HTTP_PROXY="{{ cvmfs_http_proxies | join(';') }}"
       CVMFS_QUOTA_LIMIT="{{ cvmfs_quota_limit | default('4000') }}"
     dest: "/etc/cvmfs/default.local"
-    owner: "root"
-    group: "root"
-    mode: "0644"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Include repository client options tasks
+  include_tasks: options.yml
+  vars:
+    _cvmfs_repo_option_key: client
 
 - name: Install cvmfs_wipecache setuid binary
   copy:

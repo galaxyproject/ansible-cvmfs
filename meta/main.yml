@@ -16,7 +16,7 @@ galaxy_info:
   # - CC-BY
   license: MIT
 
-  min_ansible_version: 2.3
+  min_ansible_version: 2.4
 
   # If this a Container Enabled role, provide the minimum Ansible Container version.
   # min_ansible_container_version:
@@ -35,18 +35,12 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-      - 6
-      - 7
-  # - name: Fedora
-  #   versions:
-  #   - all
-  #   - 25
-  # - name: SomePlatform
-  #   versions:
-  #   - all
-  #   - 1.0
-  #   - 7
-  #   - 99.99
+        - 6
+        - 7
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
 
   galaxy_tags:
     - system

@@ -1,18 +1,15 @@
 ---
 
-- name: Install CernVM-FS local proxy dependencies (yum)
-  yum:
-    name: "{{ item }}"
-  with_items:
-    - squid
-  when: ansible_os_family == "RedHat"
+- name: Include initial OS-specific tasks
+  include_tasks: "init_{{ ansible_os_family | lower}}.yml"
+  vars:
+    _cvmfs_role: localproxy
+    _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
 
-- name: Install CernVM-FS local proxy dependencies (apt)
-  apt:
-    name: "{{ item }}"
-  with_items:
-    - squid
-  when: ansible_os_family == "Debian"
+- name: Include squid tasks
+  include_tasks: squid.yml
+  vars:
+    _cvmfs_squid_conf_src: "{{ cvmfs_squid_conf_src | default('localproxy_squid.conf.j2') }}"
 
 # Need to double check that this actually works (see the hosts_file directive)
 #- name: Create squid hosts file
@@ -23,16 +20,8 @@
 #  notify:
 #    - restart squid
 
-- name: Configure squid for local proxies
-  template:
-    src: localproxy_squid.conf.j2
-    dest: /etc/squid/squid.conf
-    backup: yes
-  notify:
-    - restart squid
-
-- name: Ensure squid is enabled and running
-  service:
-    name: squid
-    state: started
-    enabled: yes
+- name: Include firewall tasks
+  include_tasks: firewall.yml
+  vars:
+    _cvmfs_http_ports: "{{ cvmfs_http_ports | default(cvmfs_localproxy_http_ports) }}"
+  when: cvmfs_manage_firewall

@@ -1,0 +1,16 @@
+---
+
+- name: Create /srv filesystem
+  filesystem:
+    dev: "{{ cvmfs_srv_device }}"
+    force: no
+    fstype: "{{ cvmfs_srv_fstype | default('ext4') }}"
+  when: cvmfs_srv_device is defined
+
+- name: Mount /srv
+  mount:
+    name: "{{ cvmfs_srv_mount }}"
+    src: "{{ cvmfs_srv_device }}"
+    fstype: "{{ cvmfs_srv_fstype | default('ext4') }}"
+    state: mounted
+  when: cvmfs_srv_device is defined

@@ -16,3 +16,9 @@
 - name: Install CernVM apt key
   apt_key:
     url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
+
+- name: Install CernVM-FS packages and dependencies (apt)
+  apt:
+    name: "{{ item }}"
+    state: "{{ 'latest' if _cvmfs_upgrade else 'present' }}"
+  with_items: "{{ cvmfs_packages[_cvmfs_role] }}"

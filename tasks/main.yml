@@ -1,22 +1,25 @@
 ---
 # tasks file for galaxyproject.cvmfs
 
-- name: Prepare yum for CernVM installation
-  include: repo_redhat.yml
-  when: ansible_os_family == "RedHat"
+- name: Set OS-specific variables
+  include_vars: "{{ ansible_os_family | lower }}.yml"
 
-- name: Prepare apt for CernVM installation
-  include: repo_debian.yml
-  when: ansible_os_family == "Debian"
+- name: Set facts for Galaxy CVMFS repositories, if enabled
+  set_fact:
+    cvmfs_keys: "{{ cvmfs_keys }} + {{ galaxy_cvmfs_keys }}"
+    cvmfs_server_urls: "{{ cvmfs_server_urls }} + {{ galaxy_cvmfs_server_urls }}"
+    cvmfs_repositories: "{{ cvmfs_repositories }} + {{ galaxy_cvmfs_repositories }}"
+    cvmfs_config_apache_flag: "{{ '-p' if not cvmfs_config_apache else '' }}"
+  when: galaxy_cvmfs_repos_enabled
 
-- include: client.yml
+- include_tasks: client.yml
   when: "'cvmfsclients' in group_names or cvmfs_role == 'client'"
 
-- include: stratum1.yml
+- include_tasks: stratum1.yml
   when: "'cvmfsstratum1servers' in group_names or cvmfs_role == 'stratum1'"
 
-- include: stratum0.yml
+- include_tasks: stratum0.yml
   when: "'cvmfsstratum0servers' in group_names or cvmfs_role == 'stratum0'"
 
-- include: localproxy.yml
+- include_tasks: localproxy.yml
   when: "'cvmfslocalproxies' in group_names or cvmfs_role == 'localproxy'"

@@ -1,0 +1,33 @@
+---
+
+- name: Configure squid
+  template:
+    src: "{{ _cvmfs_squid_conf_src }}"
+    dest: "{{ cvmfs_squid_conf_file }}"
+    backup: yes
+  notify:
+    - restart squid
+
+- name: Fix cache directory permission
+  file:
+    path: "{{ cvmfs_squid_cache_dir.dir }}"
+    owner: "{{ cvmfs_squid_user }}"
+    group: "{{ cvmfs_squid_group }}"
+    mode: 0755
+    state: directory
+    setype: squid_cache_t
+  when: cvmfs_squid_cache_dir is defined
+
+- name: Create the cache directories for the first time
+  become: true
+  become_user: "{{ cvmfs_squid_user }}"
+  command: squid -z
+  args:
+    creates: "{{ cvmfs_squid_cache_dir }}/00"
+  when: cvmfs_squid_cache_dir is defined
+
+- name: Ensure squid is enabled and started
+  service:
+    name: "{{ cvmfs_squid_service_name }}"
+    state: started
+    enabled: yes
