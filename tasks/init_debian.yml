@@ -7,15 +7,15 @@
     - apt-transport-https
     - ca-certificates
 
+- name: Install CernVM apt key
+  apt_key:
+    url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
+
 - name: Configure CernVM apt repository
   apt_repository:
     filename: "cernvm.list"
     mode: 422
     repo: "deb https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
-
-- name: Install CernVM apt key
-  apt_key:
-    url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
 
 - name: Install CernVM-FS packages and dependencies (apt)
   apt:
