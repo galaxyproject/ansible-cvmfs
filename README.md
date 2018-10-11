@@ -129,6 +129,7 @@ you have configured hosts in groups `cvmfsclients` and `cvmfsstratum1servers`):
           - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
           - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
           - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
+          - "http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@"
   roles:
     - galaxyproject.cvmfs
 ```
