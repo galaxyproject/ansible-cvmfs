@@ -75,7 +75,7 @@ variable | type | description
 `cvmfs_stratum1_http_ports` | list of integers | Port(s) to configure Squid on Stratum 1 servers to listen on. Default is `80` and `8000`.
 `cvmfs_stratum1_apache_port` | integer | Port to configure Apache on Stratum 1 servers to listen on. Default is `8008`.
 `cvmfs_stratum1_cache_mem` | integer in MB | Amount of memory for Squid to use for caching. Default is `128`.
-`cvmfs_stratum1_cache_dir` | list of dicts | 
+`cvmfs_stratum1_cache_dir` | list of dicts |
 `cvmfs_localproxy_http_ports` | list of integers | Port(s) to configure Squid on local proxy servers to listen on.  Default is `3128`.
 `cvmfs_upgrade_server` | boolean | Upgrade CVMFS on servers to the latest version if it is already installed. Default is `false`.
 `cvmfs_srv_device` | path | Block device to create a filesystem on and mount for CVMFS data. Unset by default.
@@ -130,6 +130,7 @@ you have configured hosts in groups `cvmfsclients` and `cvmfsstratum1servers`):
           - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
           - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
           - "http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@"
+          - "http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
   roles:
     - galaxyproject.cvmfs
 ```
@@ -187,7 +188,7 @@ MIT
 Author Information
 ------------------
 
-[Nate Coraor](https://github.com/natefoo)  
-[Helena Rasche](https://github.com/erasche)  
+[Nate Coraor](https://github.com/natefoo)
+[Helena Rasche](https://github.com/erasche)
 
 [View contributors on GitHub](https://github.com/galaxyproject/ansible-cvmfs/graphs/contributors)
