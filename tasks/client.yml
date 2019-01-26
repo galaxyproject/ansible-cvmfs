@@ -1,7 +1,6 @@
 ---
-
 - name: Include initial OS-specific tasks
-  include_tasks: "init_{{ ansible_os_family | lower}}.yml"
+  include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
     _cvmfs_role: client
     _cvmfs_upgrade: "{{ cvmfs_upgrade_client }}"
