@@ -25,7 +25,7 @@
   notify:
     - reload autofs
   args:
-    creates: /etc/auto.master.d/cvmfs.autofs
+    creates: /etc/auto.cvmfs
 
 - name: Configure CernVM-FS domain
   copy:
