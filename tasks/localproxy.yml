@@ -1,7 +1,7 @@
 ---
 
 - name: Include initial OS-specific tasks
-  include_tasks: "init_{{ ansible_os_family | lower}}.yml"
+  include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
     _cvmfs_role: localproxy
     _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
