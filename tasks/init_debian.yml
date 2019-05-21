@@ -13,14 +13,14 @@
 
 - name: Configure CernVM apt repository
   apt_repository:
-    filename: "cernvm.list"
+    filename: "cernvm"
     mode: 422
     repo: "deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
   when: ansible_distribution != 'Ubuntu'
 
 - name: Configure CernVM apt repository
   apt_repository:
-    filename: "cernvm.list"
+    filename: "cernvm"
     mode: 422
     repo: "deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('bionic', 'xenial', 'precise')
@@ -29,7 +29,7 @@
   # luck and have fun if that's you.
 - name: Configure CernVM apt repository
   apt_repository:
-    filename: "cernvm.list"
+    filename: "cernvm"
     mode: 422
     repo: "deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ xenial-prod main"
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release not in ('bionic', 'xenial', 'precise')
