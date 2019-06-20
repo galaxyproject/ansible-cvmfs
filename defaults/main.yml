@@ -49,12 +49,51 @@ cvmfs_role: '' # (client, Or stratum1 or stratum0 or localproxy)
 cvmfs_preload_install: false
 cvmfs_preload_path: /usr/bin
 
+# Support for CVMFS config repositories - see galaxy_cvmfs_config_repo for syntax
+cvmfs_config_repo: {}
+
+# CVMFS_CONFIG_REPOSITORY is not supported on Debian < 9, Ubuntu LTS < 18.04
+cvmfs_config_repo_supported: >-
+  {{
+    'true' if ansible_os_family != 'Debian' else (
+    'true' if (ansible_distribution == 'Debian' and ansible_distribution_version is version('9', '>=')) else (
+    'true' if (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '>=')) else
+    'false'))
+  }}
+
 #
 # Galaxy-specific stuff follows
 #
 
 # Automatically configure Galaxy CVMFS repos
 galaxy_cvmfs_repos_enabled: false
+
+# Defaults for galaxyproject.org config repo, syntax for each key is the same as that of cvmfs_<key | pluralize>
+galaxy_cvmfs_config_repo:
+  domain: galaxyproject.org
+  key:
+    path: /etc/cvmfs/keys/galaxyproject.org/cvmfs-config.galaxyproject.org.pub
+    key: |
+     -----BEGIN PUBLIC KEY-----
+     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuJZTWTY3/dBfspFKifv8
+     TWuuT2Zzoo1cAskKpKu5gsUAyDFbZfYBEy91qbLPC3TuUm2zdPNsjCQbbq1Liufk
+     uNPZJ8Ubn5PR6kndwrdD13NVHZpXVml1+ooTSF5CL3x/KUkYiyRz94sAr9trVoSx
+     THW2buV7ADUYivX7ofCvBu5T6YngbPZNIxDB4mh7cEal/UDtxV683A/5RL4wIYvt
+     S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
+     mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
+     dQIDAQAB
+     -----END PUBLIC KEY-----
+  urls:
+    - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
+    - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
+    - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
+    # TODO: add .eu and .org.eu Stratum 1s once they have replicated the config repo
+  repository:
+    repository: cvmfs-config.galaxyproject.org
+    stratum0: cvmfs0-psu0.galaxyproject.org
+    owner: "{{ cvmfs_repo_owner | default('root') }}"
+    server_options: []
+    client_options: []
 
 # Defaults for galaxyproject.org repos
 galaxy_cvmfs_keys:
@@ -113,6 +152,17 @@ galaxy_cvmfs_keys:
       Zu859ZLVjmkMxPxEPNxgNnc+DohK5wFPt7MHSejvCmd1J8iL4DOXUN2VvgJ9NrUN
       hwIDAQAB
       -----END PUBLIC KEY-----
+  - path: /etc/cvmfs/keys/galaxyproject.org/usegalaxy.galaxyproject.org.pub
+    key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsqb8HIG5T/juOmVpByIE
+      UfboKj7S2LbnWCZdCAoA9EfQfsxi/p3iWu1j9/0iJjf4yKs+pI6mJL/t+txB9fM5
+      EYdYJv/awH7W4A47e8/CR25HzoM9PjxbssRbHSGWLrDBPHUcyQh7gZGqJYdXIyeS
+      DrgPoftn04xuLQvmPWbi8Ng14c+Kn8947PxZ5hVOmApEd4gzkHI0qFfC7dTN/rTh
+      KdC5mWONdRmmSDM4OmgJl7wdzE5pUTA+H1GagESxG4Cm/7EN9ZnVgWdb/sgVTxHG
+      e3odhIy/hV82RHkaW456/jhd8tD8LHpY8jdM/rWvwrBgI7WntqSijOUe2a6uC7S1
+      sQIDAQAB
+      -----END PUBLIC KEY-----
 
 galaxy_cvmfs_server_urls:
   - domain: galaxyproject.org
@@ -127,34 +177,40 @@ galaxy_cvmfs_server_urls:
 galaxy_cvmfs_repositories:
   - repository: test.galaxyproject.org
     stratum0: cvmfs0-tacc0.galaxyproject.org
-    owner: g2test
+    owner: "{{ cvmfs_repo_owner | default('root') }}"
     key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options:
       - CVMFS_AUTO_GC=false
     client_options: []
   - repository: main.galaxyproject.org
     stratum0: cvmfs0-tacc0.galaxyproject.org
-    owner: g2main
+    owner: "{{ cvmfs_repo_owner | default('root') }}"
     key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options:
       - CVMFS_AUTO_GC=false
     client_options: []
   - repository: data.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
-    owner: g2test
+    owner: "{{ cvmfs_repo_owner | default('root') }}"
     key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options:
       - CVMFS_AUTO_GC=false
     client_options: []
   - repository: sandbox.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
-    owner: sandbox
+    owner: "{{ cvmfs_repo_owner | default('root') }}"
     key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options: []
     client_options: []
   - repository: singularity.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
-    owner: singularity
+    owner: "{{ cvmfs_repo_owner | default('root') }}"
+    key_dir: /etc/cvmfs/keys/galaxyproject.org
+    server_options: []
+    client_options: []
+  - repository: usegalaxy.galaxyproject.org
+    stratum0: cvmfs0-psu0.galaxyproject.org
+    owner: "{{ cvmfs_repo_owner | default('root') }}"
     key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options: []
     client_options: []

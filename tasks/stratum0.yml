@@ -4,6 +4,10 @@
 # fails if /tmp is xfs, although for some reason was fine on the PSU stratum 0
 # w/ xfs /tmp).
 
+- name: Determine whether -p flag is needed for cvmfs_server mkfs or import
+  set_fact:
+    cvmfs_config_apache_flag: "{{ '-p' if not cvmfs_config_apache else '' }}"
+
 - name: Include initial OS-specific tasks
   include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
@@ -21,6 +25,8 @@
     group: "root"
     mode: "0400"
   with_items: "{{ cvmfs_private_keys }}"
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: Include stratumN tasks
   include_tasks: stratumN.yml

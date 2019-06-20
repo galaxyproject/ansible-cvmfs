@@ -8,6 +8,8 @@
     group: root
     mode: 0755
   with_items: "{{ cvmfs_keys }}"
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: Install CernVM-FS keys
   copy:
@@ -17,3 +19,5 @@
     group: root
     mode: 0444
   with_items: "{{ cvmfs_keys }}"
+  loop_control:
+    label: "{{ item.path }}"
