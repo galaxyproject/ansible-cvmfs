@@ -1,4 +1,5 @@
 ---
+
 - name: Include initial OS-specific tasks
   include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
@@ -27,16 +28,44 @@
   args:
     creates: /etc/auto.cvmfs
 
+- name: Configure CernVM-FS config repository
+  block:
+
+    - name: Create config repo config
+      copy:
+        content: |
+          ## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
+          CVMFS_SERVER_URL="{{ cvmfs_config_repo.urls | join(';') }}"
+          CVMFS_PUBLIC_KEY="{{ cvmfs_config_repo.key.path }}"
+        dest: /etc/cvmfs/config.d/{{ cvmfs_config_repo.repository.repository }}.conf
+        owner: root
+        group: root
+        mode: 0444
+
+    - name: Set config repo defaults
+      copy:
+        content: |
+          ## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
+          CVMFS_CONFIG_REPOSITORY="{{ cvmfs_config_repo.repository.repository }}"
+          CVMFS_DEFAULT_DOMAIN="{{ cvmfs_config_repo.domain }}"
+          CVMFS_USE_GEOAPI="{{ item.use_geoapi | ternary('yes', 'no') }}"
+        dest: /etc/cvmfs/default.d/80-ansible-galaxyproject-cvmfs.conf
+        owner: root
+        group: root
+        mode: 0444
+
+  when: cvmfs_config_repo and cvmfs_config_repo_supported
+
 - name: Configure CernVM-FS domain
   copy:
     content: |
+      ## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
       CVMFS_SERVER_URL="{{ item.urls | join(';') }}"
       CVMFS_KEYS_DIR=/etc/cvmfs/keys/{{ item.domain }}
-      CVMFS_USE_GEOAPI="{{ item.use_geoapi | ternary('yes', 'no') }}"
     dest: /etc/cvmfs/domain.d/{{ item.domain }}.conf
     owner: root
     group: root
-    mode: 0644
+    mode: 0444
   with_items: "{{ cvmfs_server_urls }}"
 
 - name: Configure CernVM-FS global client settings
