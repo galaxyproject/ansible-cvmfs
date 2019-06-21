@@ -48,7 +48,7 @@
           ## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
           CVMFS_CONFIG_REPOSITORY="{{ cvmfs_config_repo.repository.repository }}"
           CVMFS_DEFAULT_DOMAIN="{{ cvmfs_config_repo.domain }}"
-          CVMFS_USE_GEOAPI="{{ item.use_geoapi | ternary('yes', 'no') }}"
+          CVMFS_USE_GEOAPI="{{ cvmfs_config_repo.use_geoapi | default(false) | ternary('yes', 'no') }}"
         dest: /etc/cvmfs/default.d/80-ansible-galaxyproject-cvmfs.conf
         owner: root
         group: root
@@ -62,6 +62,7 @@
       ## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
       CVMFS_SERVER_URL="{{ item.urls | join(';') }}"
       CVMFS_KEYS_DIR=/etc/cvmfs/keys/{{ item.domain }}
+      CVMFS_USE_GEOAPI="{{ item.use_geoapi | ternary('yes', 'no') }}"
     dest: /etc/cvmfs/domain.d/{{ item.domain }}.conf
     owner: root
     group: root
