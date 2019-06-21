@@ -37,10 +37,14 @@
   when: cvmfs_manage_firewall
 
 - name: Ensure replicas are configured
-  command: /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }} http://{{ item.stratum0 }}/cvmfs/{{ item.repository }} {{ item.key_dir | default('/etc/cvmfs/keys') }}/{{ item.repository }}.pub
+  command: >-
+    /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }}
+      http://{{ item.stratum0 }}/cvmfs/{{ item.repository }}
+      {{ item.key_dir | default('/etc/cvmfs/keys') }}/{{ item.repository }}.pub
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
+  register: __cvmfs_add_replica_result
   notify:
     - restart apache
 
@@ -48,6 +52,11 @@
   include_tasks: options.yml
   vars:
     _cvmfs_repo_option_key: server
+
+- name: Perform initial snapshot
+  command: /usr/bin/cvmfs_server snapshot {{ item.item.repository }}
+  with_items: "{{ __cvmfs_add_replica_result.results }}"
+  when: item is changed
 
 - name: Create CVMFS stratum1 logrotate configuration
   copy:
