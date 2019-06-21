@@ -54,6 +54,12 @@
         group: root
         mode: 0444
 
+    # This is here for transitioning from galaxy_cvmfs_repos_enabled == true config-repo
+    - name: Remove domain configuration
+      file:
+        path: /etc/cvmfs/domain.d/{{ cvmfs_config_repo.domain }}.conf
+        state: absent
+
   when: cvmfs_config_repo and cvmfs_config_repo_supported
 
 - name: Configure CernVM-FS domain
