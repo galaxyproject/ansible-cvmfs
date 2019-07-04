@@ -2,10 +2,9 @@
 
 - name: Install apt dependencies
   apt:
-    name: "{{ item }}"
-  with_items:
-    - apt-transport-https
-    - ca-certificates
+    name:
+      - apt-transport-https
+      - ca-certificates
 
 - name: Install CernVM apt key
   apt_key:

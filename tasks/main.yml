@@ -19,7 +19,7 @@
 - name: Set facts for CVMFS config repository, if enabled
   set_fact:
     cvmfs_keys: "{{ cvmfs_keys }} + [{{ cvmfs_config_repo.key }}]"
-  when: cvmfs_config_repo
+  when: cvmfs_config_repo | bool
 
 - include_tasks: client.yml
   when: "'cvmfsclients' in group_names or cvmfs_role == 'client'"
