@@ -87,7 +87,8 @@ galaxy_cvmfs_config_repo:
     - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
     - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
     - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
-    # TODO: add .eu and .org.eu Stratum 1s once they have replicated the config repo
+    - "http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
+    - "http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@"
   repository:
     repository: cvmfs-config.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
