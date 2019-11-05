@@ -43,10 +43,21 @@
       {{ item.key_dir | default('/etc/cvmfs/keys') }}/{{ item.repository }}.pub
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
-  with_items: "{{ cvmfs_repositories }}"
+  loop: "{{ cvmfs_repositories }}"
   register: __cvmfs_add_replica_result
   notify:
     - restart apache
+
+# Ideally we could use item.stratum0_url_scheme directly in `cvmfs_server add-replica` above, but it appears not to
+# support it, so we instead have to change it after the fact
+- name: Configure replicas for SSL
+  lineinfile:
+    path: /etc/cvmfs/repositories.d/{{ item.repository }}/server.conf
+    regexp: '^CVMFS_STRATUM0=http://(.*)'
+    line: 'CVMFS_STRATUM0=https://\1'
+    backrefs: yes
+  loop: "{{ cvmfs_repositories }}"
+  when: item.stratum0_url_scheme | default('http') == 'https'
 
 - name: Include repository server options tasks
   include_tasks: options.yml
@@ -55,7 +66,11 @@
 
 - name: Perform initial snapshot
   command: /usr/bin/cvmfs_server snapshot {{ item.item.repository }}
-  with_items: "{{ __cvmfs_add_replica_result.results }}"
+  loop: "{{ __cvmfs_add_replica_result.results }}"
+  loop_control:
+    label: "{{ item.item.repository }}"
+  environment:
+    X509_CERT_BUNDLE: "{{ cvmfs_x509_cert_bundle | default(ansible_env.X509_CERT_BUNDLE | default('')) }}"
   when: item is changed
 
 - name: Create CVMFS stratum1 logrotate configuration
@@ -73,7 +88,10 @@
     name: cvmfs_snapshot_all
     cron_file: ansible_cvmfs_stratum1_snapshot
     user: root
-    job: output=$(/usr/bin/cvmfs_server snapshot -a -i 2>&1) || echo "$output"
+    job: >-
+        output=$(
+        {{- ("X509_CERT_BUNDLE=" ~ cvmfs_x509_cert_bundle | quote) ~ " " if cvmfs_x509_cert_bundle is defined else "" -}}
+        /usr/bin/cvmfs_server snapshot -a -i 2>&1) || echo "$output"
     minute: "*/5"
 
 - name: Include garbage collection tasks
