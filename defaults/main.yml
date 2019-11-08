@@ -61,6 +61,12 @@ cvmfs_config_repo_supported: >-
     'false'))
   }}
 
+# You can make Stratum 1s snapshot over HTTPS if
+#   1. the Stratum 0 is appropriately configured to serve HTTPS (this role does not handle such configuration for you),
+#   2. the entry in 'cvmfs_repositories' has 'stratum0_url_scheme' set to 'https', and
+#   3. this points to a cert bundle that contains CA certs for your Stratum 0 (the default here is valid for EL).
+#cvmfs_x509_cert_bundle: /etc/pki/tls/cert.pem
+
 #
 # Galaxy-specific stuff follows
 #
