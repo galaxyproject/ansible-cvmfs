@@ -50,14 +50,13 @@
 
 # Ideally we could use item.stratum0_url_scheme directly in `cvmfs_server add-replica` above, but it appears not to
 # support it, so we instead have to change it after the fact
-- name: Configure replicas for SSL
+- name: Configure replica stratum0 URLs
   lineinfile:
     path: /etc/cvmfs/repositories.d/{{ item.repository }}/server.conf
-    regexp: '^CVMFS_STRATUM0=http://(.*)'
-    line: 'CVMFS_STRATUM0=https://\1'
+    regexp: '^CVMFS_STRATUM0=https?://[^/]+/(.*)'
+    line: 'CVMFS_STRATUM0={{ item.stratum0_url_scheme | default("http") }}://{{ item.stratum0 }}/\1'
     backrefs: yes
   loop: "{{ cvmfs_repositories }}"
-  when: item.stratum0_url_scheme | default('http') == 'https'
 
 - name: Include repository server options tasks
   include_tasks: options.yml
