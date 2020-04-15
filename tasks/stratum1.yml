@@ -36,6 +36,14 @@
     _cvmfs_http_ports: "{{ cvmfs_http_ports | default(cvmfs_stratum1_http_ports) }}"
   when: cvmfs_manage_firewall
 
+- name: Install GeoIP API key
+  copy:
+    content: |
+      CVMFS_GEO_LICENSE_KEY="{{ cvmfs_geo_license_key }}"
+    mode: 0400
+    dest: /etc/cvmfs/server.local
+  when: cvmfs_geo_license_key is defined
+
 - name: Ensure replicas are configured
   command: >-
     /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }}
@@ -92,6 +100,17 @@
         {{- ("X509_CERT_BUNDLE=" ~ cvmfs_x509_cert_bundle | quote) ~ " " if cvmfs_x509_cert_bundle is defined else "" -}}
         /usr/bin/cvmfs_server snapshot -a -i 2>&1) || echo "$output"
     minute: "*/5"
+
+- name: Schedule GeoIP database updates
+  cron:
+    name: cvmfs_geoip_db_update
+    cron_file: ansible_cvmfs_geoip_db_update
+    user: root
+    job: /usr/bin/cvmfs_server update-geodb
+    minute: "{{ cvmfs_geoip_db_update_minute }}"
+    hour: "{{ cvmfs_geoip_db_update_hour }}"
+    day: "{{ cvmfs_geoip_db_update_day }}"
+  when: cvmfs_geo_license_key is defined
 
 - name: Include garbage collection tasks
   include_tasks: gc.yml
