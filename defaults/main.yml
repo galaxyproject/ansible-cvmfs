@@ -86,15 +86,15 @@ galaxy_cvmfs_config_repo:
   key:
     path: /etc/cvmfs/keys/galaxyproject.org/cvmfs-config.galaxyproject.org.pub
     key: |
-     -----BEGIN PUBLIC KEY-----
-     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuJZTWTY3/dBfspFKifv8
-     TWuuT2Zzoo1cAskKpKu5gsUAyDFbZfYBEy91qbLPC3TuUm2zdPNsjCQbbq1Liufk
-     uNPZJ8Ubn5PR6kndwrdD13NVHZpXVml1+ooTSF5CL3x/KUkYiyRz94sAr9trVoSx
-     THW2buV7ADUYivX7ofCvBu5T6YngbPZNIxDB4mh7cEal/UDtxV683A/5RL4wIYvt
-     S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
-     mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
-     dQIDAQAB
-     -----END PUBLIC KEY-----
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuJZTWTY3/dBfspFKifv8
+      TWuuT2Zzoo1cAskKpKu5gsUAyDFbZfYBEy91qbLPC3TuUm2zdPNsjCQbbq1Liufk
+      uNPZJ8Ubn5PR6kndwrdD13NVHZpXVml1+ooTSF5CL3x/KUkYiyRz94sAr9trVoSx
+      THW2buV7ADUYivX7ofCvBu5T6YngbPZNIxDB4mh7cEal/UDtxV683A/5RL4wIYvt
+      S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
+      mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
+      dQIDAQAB
+      -----END PUBLIC KEY-----
   urls:
     - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
     - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
@@ -110,6 +110,18 @@ galaxy_cvmfs_config_repo:
 
 # Defaults for galaxyproject.org repos
 galaxy_cvmfs_keys:
+  # This will become the key for all repos, currently cvmfs-config and singularity
+  - path: /etc/cvmfs/keys/galaxyproject.org/galaxyproject.org.pub
+    key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuJZTWTY3/dBfspFKifv8
+      TWuuT2Zzoo1cAskKpKu5gsUAyDFbZfYBEy91qbLPC3TuUm2zdPNsjCQbbq1Liufk
+      uNPZJ8Ubn5PR6kndwrdD13NVHZpXVml1+ooTSF5CL3x/KUkYiyRz94sAr9trVoSx
+      THW2buV7ADUYivX7ofCvBu5T6YngbPZNIxDB4mh7cEal/UDtxV683A/5RL4wIYvt
+      S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
+      mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
+      dQIDAQAB
+      -----END PUBLIC KEY-----
   - path: /etc/cvmfs/keys/galaxyproject.org/test.galaxyproject.org.pub
     key: |
       -----BEGIN PUBLIC KEY-----
@@ -153,17 +165,6 @@ galaxy_cvmfs_keys:
       WDNbviUi62sBl1SWQ95kcsfqfviU94DKGWRWDYngnYRV5PZVLuUw8Egix6lW2Sj0
       l5LILRbaIyXiTsFqXfK1dtjAOmZMkX4wuBch13y9FhMCIRvBDWYQuyxugSC101Ur
       YwIDAQAB
-      -----END PUBLIC KEY-----
-  - path: /etc/cvmfs/keys/galaxyproject.org/singularity.galaxyproject.org.pub
-    key: |
-      -----BEGIN PUBLIC KEY-----
-      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt977djqKnD4WbYNq8VtU
-      v9b8BgFzo1wh8rEUdj/2W9IvLXr5iWRrk1OvyZugYGxUg2JSVxiSXJhP1m8uBfBG
-      aX2jn4iAq1suuIxJ6UMO+SYR/9yUANY/JKvfI9qHN9ItXxYveRXwORWb6s3zyCm3
-      FFTRTUVQ5NFC+yT13BeIKyLMhT8yMSnlZ/5f8kuwSC1v/2QcC6UWDrHaUcEGWcHS
-      EfiTov/pVXq0Hv3M2kwBWMqWeFey4WbnuNOCXYrYy9VCxmPAtO0TjFuThMr9XyWc
-      Zu859ZLVjmkMxPxEPNxgNnc+DohK5wFPt7MHSejvCmd1J8iL4DOXUN2VvgJ9NrUN
-      hwIDAQAB
       -----END PUBLIC KEY-----
   - path: /etc/cvmfs/keys/galaxyproject.org/usegalaxy.galaxyproject.org.pub
     key: |
