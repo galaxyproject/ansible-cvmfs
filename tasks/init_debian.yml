@@ -22,7 +22,7 @@
     filename: "cernvm.list"
     mode: 422
     repo: "deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('bionic', 'xenial', 'precise')
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('bionic', 'xenial', 'precise', 'focal')
 
   # There are no packages for any of the non LTS versions so good
   # luck and have fun if that's you.
@@ -31,7 +31,7 @@
     filename: "cernvm.list"
     mode: 422
     repo: "deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ xenial-prod main"
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release not in ('bionic', 'xenial', 'precise')
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release not in ('bionic', 'xenial', 'precise', 'focal')
 
 - name: Install CernVM-FS packages and dependencies (apt)
   apt:
