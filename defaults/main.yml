@@ -144,6 +144,8 @@ galaxy_cvmfs_keys:
       NVNhhcb66OJHah5ppI1N3cZehdaKyr1XcF9eedwLFTvuiwTn6qMmttT/tHX7rcxT
       owIDAQAB
       -----END PUBLIC KEY-----
+  - path: /etc/cvmfs/keys/galaxyproject.org/refgenomes-databio.galaxyproject.org.pub
+    key: "{{ galaxy_cvmfs_config_repo['key']['key'] }}"
   - path: /etc/cvmfs/keys/galaxyproject.org/main.galaxyproject.org.pub
     key: |
       -----BEGIN PUBLIC KEY-----
@@ -166,6 +168,8 @@ galaxy_cvmfs_keys:
       l5LILRbaIyXiTsFqXfK1dtjAOmZMkX4wuBch13y9FhMCIRvBDWYQuyxugSC101Ur
       YwIDAQAB
       -----END PUBLIC KEY-----
+  - path: /etc/cvmfs/keys/galaxyproject.org/singularity.galaxyproject.org.pub
+    key: "{{ galaxy_cvmfs_config_repo['key']['key'] }}"
   - path: /etc/cvmfs/keys/galaxyproject.org/usegalaxy.galaxyproject.org.pub
     key: |
       -----BEGIN PUBLIC KEY-----
@@ -176,7 +180,7 @@ galaxy_cvmfs_keys:
       KdC5mWONdRmmSDM4OmgJl7wdzE5pUTA+H1GagESxG4Cm/7EN9ZnVgWdb/sgVTxHG
       e3odhIy/hV82RHkaW456/jhd8tD8LHpY8jdM/rWvwrBgI7WntqSijOUe2a6uC7S1
       sQIDAQAB
-      -----END PUBLIC KEY-----
+      -----END PUBLIC KEY------ 
 
 galaxy_cvmfs_server_urls:
   - domain: galaxyproject.org
