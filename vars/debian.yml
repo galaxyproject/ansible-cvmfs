@@ -15,6 +15,7 @@ cvmfs_packages:
     - cvmfs-config-default
   stratum1:
     - apache2
+    - squid
     - cvmfs-server
     - cvmfs-config-default
   localproxy:
