@@ -13,6 +13,7 @@ cvmfs_packages:
     - apache2
     - cvmfs-server
     - cvmfs-config-default
+    - cvmfs
   stratum1:
     - apache2
     - libapache2-mod-wsgi
