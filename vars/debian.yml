@@ -15,6 +15,7 @@ cvmfs_packages:
     - cvmfs-config-default
   stratum1:
     - apache2
+    - libapache2-mod-wsgi
     - squid
     - cvmfs-server
     - cvmfs-config-default
