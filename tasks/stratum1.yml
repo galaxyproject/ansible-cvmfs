@@ -114,6 +114,7 @@
 
 - name: Include garbage collection tasks
   include_tasks: gc.yml
+  when: cvmfs_gc_enabled
 
 # allow unprivileged users to restart squid
 - name: Allow users to manage services
