@@ -45,6 +45,42 @@ cvmfs_config_apache: true
 # group_names
 cvmfs_role: '' # (client, Or stratum1 or stratum0 or localproxy)
 
+# Specify whether `cvmfs_server gc -a` should be run from cron to garbage collect all repos on the server, disable this
+# option if your repos don't use CVMFS_AUTO_GC=false.
+cvmfs_gc_enabled: true
+
+# Garbage collection log path (directory will be created if necessary). This is the default path but CVMFS packages
+# don't precreate the directory for you so `cvmfs_server gc -a` will fail by default.
+cvmfs_gc_log: /var/log/cvmfs/gc.log
+
+# User to run garbage collection as. This user must have permission to gc all repositories on the server (i.e. it should
+# be `root` if you have repositories owned by multiple users)
+cvmfs_gc_user: root
+
+# Specify the options passed to `cvmfs_server gc`. If you override these you will need to include `-a -f` in your value
+# or the job will fail
+cvmfs_gc_options: "-a -f -L {{ cvmfs_gc_log }}"
+
+# Garbage collection cron job timing, hash keys correspond to the cron module options:
+#   https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html
+#
+#cvmfs_gc_time:
+#  special_time:
+#  hour:
+#  minute:
+#  day:
+#  month:
+#  weekday:
+#
+# e.g. for 3 AM nightly:
+#cvmfs_gc_time:
+#  hour: 3
+#  minute: 0
+#
+# Use @weekly by default:
+cvmfs_gc_time:
+  special_time: weekly
+
 # Optionally download the preload utility
 cvmfs_preload_install: false
 cvmfs_preload_path: /usr/bin

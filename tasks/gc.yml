@@ -1,12 +1,29 @@
 ---
 
+# gc -a support implemented in 2021/02, this task can be removed at some later date
+- name: Remove per-repository garbage collection cron jobs
+  cron:
+    name: cvmfs_gc_{{ item.repository }}
+    cron_file: ansible_cvmfs_gc
+    state: absent
+  loop: "{{ cvmfs_repositories }}"
+
+- name: Create garbage collection log directory
+  file:
+    path: "{{ cvmfs_gc_log | dirname }}"
+    state: directory
+    owner: "{{ cvmfs_gc_user }}"
+    mode: 0755
+
 - name: Schedule garbage collection
   cron:
-    name: cvmfs_gc_{{ item.1.repository }}
-    cron_file: ansible_cvmfs_gc
-    user: "{{ item.1.owner | default('root') }}"
-    job: output=$(/usr/bin/cvmfs_server gc -f -t '1 Jan 1970 00:00:00' {{ item.1.repository }} 2>&1) || echo "$output"
-    hour: 3
-    minute: "{{ item.0 }}"
-    weekday: 3
-  with_indexed_items: "{{ cvmfs_repositories }}"
+    name: cvmfs_gc_all
+    cron_file: ansible_cvmfs_gc_all
+    user: "{{ cvmfs_gc_user }}"
+    job: /usr/bin/cvmfs_server gc {{ cvmfs_gc_options }}
+    hour: "{{ cvmfs_gc_time.hour | default(omit) }}"
+    minute: "{{ cvmfs_gc_time.minute | default(omit) }}"
+    day: "{{ cvmfs_gc_time.day | default(omit) }}"
+    month: "{{ cvmfs_gc_time.month | default(omit) }}"
+    weekday: "{{ cvmfs_gc_time.weekday | default(omit) }}"
+    special_time: "{{ cvmfs_gc_time.special_time | default(omit) }}"
