@@ -4,7 +4,7 @@
   action:
     module: yum_repository
   args:
-    file: "cernvm.repo"
+    file: "cernvm"
     name: "{{ item.name }}"
     description: "{{ item.description }}"
     baseurl: "{{ item.baseurl }}"
