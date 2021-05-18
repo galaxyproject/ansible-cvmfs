@@ -2,9 +2,8 @@
 
 # gc -a support implemented in 2021/02, this task can be removed at some later date
 - name: Remove per-repository garbage collection cron jobs
-  cron:
-    name: cvmfs_gc_{{ item.repository }}
-    cron_file: ansible_cvmfs_gc
+  file:
+    path: /etc/cron.d/cvmfs_gc_{{ item.repository }}
     state: absent
   loop: "{{ cvmfs_repositories }}"
 
