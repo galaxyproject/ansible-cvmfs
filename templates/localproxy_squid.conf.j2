@@ -1,0 +1,21 @@
+##
+## This file is managed by Ansible.  ALL CHANGES WILL BE OVERWRITTEN.
+##
+
+http_port 3128 accel
+http_access allow all
+
+always_direct allow all
+
+# {% if cvmfs_localproxy_cache_dir is defined %}
+# cache_dir ufs {{ cvmfs_localproxy_cache_dir.dir }} {{ cvmfs_localproxy_cache_dir.size }} 16 256
+# {% endif %}
+
+cache_mem {{ cvmfs_localproxy_cache_mem }} MB
+
+minimum_expiry_time 0
+# This is for the disk cache
+#maximum_object_size 1024 MB
+maximum_object_size_in_memory {{ cvmfs_localproxy_maximum_object_size_in_memory }} MB
+
+# visible_hostname {{ inventory_hostname }}
