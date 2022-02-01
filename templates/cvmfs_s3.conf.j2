@@ -1,0 +1,29 @@
+CVMFS_S3_ACCESS_KEY={{ cvmfs_s3_access_key }}
+CVMFS_S3_SECRET_KEY={{ cvmfs_s3_secret_key }}
+CVMFS_S3_HOST={{ cvmfs_s3_host }}
+{% if cvmfs_s3_flavor is defined and cvmfs_s3_flavor %}
+CVMFS_S3_FLAVOR={{ cvmfs_s3_flavor }}
+{% endif %}
+{% if cvmfs_s3_region is defined and cvmfs_s3_region %}
+CVMFS_S3_REGION={{ cvmfs_s3_region }}
+{% endif %}
+CVMFS_S3_PORT={{ cvmfs_s3_port }}
+CVMFS_S3_BUCKET={{ cvmfs_s3_bucket }}
+{% if cvmfs_s3_use_https is defined %}
+CVMFS_S3_USE_HTTPS={{ "true" if (cvmfs_s3_use_https | bool) else "false" }}
+{% endif %}
+{% if cvmfs_s3_timeout is defined and cvmfs_s3_timeout %}
+CVMFS_S3_TIMEOUT={{ cvmfs_s3_timeout }}
+{% endif %}
+{% if cvmfs_s3_max_retries is defined and cvmfs_s3_max_retries %}
+CVMFS_S3_MAX_RETRIES={{ cvmfs_s3_max_retries }}
+{% endif %}
+{% if cvmfs_s3_max_number_of_parallel_connections is defined and cvmfs_s3_max_number_of_parallel_connections %}
+CVMFS_S3_MAX_NUMBER_OF_PARALLEL_CONNECTIONS={{ cvmfs_s3_max_number_of_parallel_connections }}
+{% endif %}
+{% if cvmfs_s3_dns_buckets is defined %}
+CVMFS_S3_DNS_BUCKETS={{ "true" if (cvmfs_s3_dns_buckets | bool) else "false" }}
+{% endif %}
+{% if cvmfs_s3_peek_before_put is defined and cvmfs_s3_peek_before_put %}
+CVMFS_S3_PEEK_BEFORE_PUT={{ cvmfs_s3_peek_before_put }}
+{% endif %}

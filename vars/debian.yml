@@ -17,6 +17,7 @@ cvmfs_packages:
     - apache2
     - cvmfs-server
     - cvmfs-config-default
+    - squid
   localproxy:
     - squid
   client:
