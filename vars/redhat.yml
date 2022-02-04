@@ -9,17 +9,8 @@ cvmfs_squid_user: squid
 cvmfs_squid_group: squid
 
 cvmfs_packages:
-  stratum0:
-    - httpd
-    - cvmfs-server
-    - cvmfs-config-default
-    - cvmfs
-  stratum1:
-    - httpd
-    - mod_wsgi
-    - squid
-    - cvmfs-server
-    - cvmfs-config-default
+  stratum0: "{{ (['cvmfs-server', 'cvmfs-config-default', 'cvmfs'] + ['httpd'] if cvmfs_config_apache else []) | select() | list }}"
+  stratum1: "{{ (['cvmfs-server', 'cvmfs-config-default'] + ['httpd', 'mod_wsgi'] if cvmfs_config_apache else [] + ['squid'] if cvmfs_config_squid else []) | select() | list }}"
   localproxy:
     - squid
   client:
