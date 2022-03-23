@@ -1,0 +1,6 @@
+#
+# This file is managed by Ansible.  ALL CHANGES WILL BE OVERWRITTEN.
+#
+{% for opt in (cvmfs_s3_config | dict2items) %}
+{{ opt.key }}={{ opt.value }}
+{% endfor %}

@@ -12,14 +12,14 @@ cvmfs_packages:
   stratum0:
     - httpd
     - cvmfs-server
-    - cvmfs-config-default
     - cvmfs
-  stratum1:
+  stratum1-disk:
     - httpd
-    - mod_wsgi
+    - python3-mod_wsgi
     - squid
     - cvmfs-server
-    - cvmfs-config-default
+  stratum1-s3:
+    - cvmfs-server
   localproxy:
     - squid
   client:
