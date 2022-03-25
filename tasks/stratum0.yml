@@ -50,7 +50,7 @@
       -f {{ cvmfs_union_fs }}
       {{ item.repository }}
   args:
-    creates: "{{ '/srv/cvmfs/' ~ item.repository when (cvmfs_storage == 'disk') else '/etc/cvmfs/repositories.d/' ~ item.repository }}"
+    creates: "{{ '/srv/cvmfs/' ~ item.repository if (cvmfs_storage == 'disk') else '/etc/cvmfs/repositories.d/' ~ item.repository }}"
   with_items: "{{ cvmfs_repositories }}"
   notify:
     - restart apache
