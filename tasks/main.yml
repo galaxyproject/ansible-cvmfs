@@ -11,9 +11,9 @@
 
 - name: Set facts for Galaxy CVMFS static repositories, if enabled
   set_fact:
-    cvmfs_keys: "{{ cvmfs_keys }} + {{ galaxy_cvmfs_keys }}"
-    cvmfs_repositories: "{{ cvmfs_repositories }} + {{ galaxy_cvmfs_repositories }}"
-    cvmfs_server_urls: "{{ cvmfs_server_urls }} + {{ galaxy_cvmfs_server_urls }}"
+    cvmfs_keys: "{{ cvmfs_keys + galaxy_cvmfs_keys }}"
+    cvmfs_repositories: "{{ cvmfs_repositories + galaxy_cvmfs_repositories }}"
+    cvmfs_server_urls: "{{ cvmfs_server_urls + galaxy_cvmfs_server_urls }}"
   when: galaxy_cvmfs_repos_enabled and galaxy_cvmfs_repos_enabled != 'config-repo'
 
 - name: Set facts for CVMFS config repository, if enabled
