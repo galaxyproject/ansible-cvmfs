@@ -33,6 +33,11 @@
 
 - name: Include Apache tasks
   include_tasks: apache.yml
+  when: cvmfs_backend == "filesystem" and cvmfs_config_apache
+
+- name: Include S3 tasks
+  include_tasks: s3.yml
+  when: cvmfs_backend in ["s3", "S3"]
 
 - name: Include firewall tasks
   include_tasks: firewall.yml
@@ -41,7 +46,9 @@
   when: cvmfs_manage_firewall
 
 - name: Create repositories
-  command: /usr/bin/cvmfs_server mkfs {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
+  command: >-
+    /usr/bin/cvmfs_server mkfs {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }}
+      -f {{ cvmfs_union_fs }} {{ item.repository }} -s {{ cvmfs_s3_conf_path }} -w {{ cvmfs_s3_bucket_url }}
   args:
     creates: /srv/cvmfs/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"

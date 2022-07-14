@@ -94,7 +94,8 @@ cvmfs_repositories:
 variable | type | description
 --- | --- | ---
 `cvmfs_private_keys` | list of dicts | Keys to install on Stratum 0 hosts. Separate from `cvmfs_keys` for vaultability and avoiding duplication.
-`cvmfs_config_apache` | boolean | Configure Apache on Stratum 0 and 1 servers. If disabled, you must configure it yourself. Default is `true`.
+`cvmfs_config_apache` | boolean | Configure Apache on Stratum 0 and 1 servers. It can be disabled if using an S3 backend, or you want to configure it yourself. Default is `true`.
+`cvmfs_config_squid` | boolean | Configure Squid on Stratum 0 and 1 servers. It can be disabled if using an S3 backend, or you want to configure it yourself. Default is `true`.
 `cvmfs_manage_firewall` | boolean | Attempt to configure firewalld (EL) or ufw (Debian) to permit traffic to configured ports. Default is `false`.
 `cvmfs_squid_conf_src` | path | Path to template Squid configuration file (for Stratum 1 and local proxy servers). Defaults are in the role `templates/` directory.
 `cvmfs_stratum0_http_ports` | list of integers | Port(s) to configure Apache on Stratum 0 servers to listen on. Default is `80`.
@@ -109,10 +110,35 @@ variable | type | description
 `cvmfs_srv_mount` | path | Path to mount CVMFS data volume on. Default is `/srv` (but is ignored if `cvmfs_srv_device` is unset).
 `cvmfs_union_fs` | string | Union filesystem type (`overlayfs` or `aufs`) for new repositories on Stratum 0 servers.
 `cvmfs_numfiles` | integer | Set the maximum number of open files in `/etc/security/limits.conf`. Useful with the `CVMFS_NFILES` client option on Stratum 0 servers.
+`cvmfs_backend` | string | The storage backend to use for CVMFS (`filesystem` or `s3`). If using `s3`, additional options are available to configure settings.
+
+### S3 backend configuration variables
+
+If using the S3 `cvmfs_backend`, the following additional options can be set. Refer to [cvmfs docs][s3_config] on s3 config for more details.
+
+variable | type | description
+--- | --- | ---
+`cvmfs_s3_access_key` | string | The access key to use when connecting to S3 storage.
+`cvmfs_s3_secret_key` | string | The secret key to use when connecting to S3 storage.
+`cvmfs_s3_host` | string | S3 server hostname, e.g. s3.amazonaws.com. The hostname should NOT be prefixed by “http://”.
+`cvmfs_s3_flavor` | string | Set to “azure” if you store files in Microsoft Azure Blob Storage.
+`cvmfs_s3_region` | string | The S3 region, e.g. eu-central-1. If specified, AWSv4 authorization protocol is used.
+`cvmfs_s3_port` | integer | The port on which the S3 instance is running.
+`cvmfs_s3_bucket` | string | S3 bucket name. The repository name is used as a subdirectory inside the bucket.
+`cvmfs_s3_bucket_url` | string | Public facing URL of the bucket, if using OpenStack or similar. (e.g. https://object-store.rc.nectar.org.au/v1/AUTH_377/cvmfs)
+`cvmfs_s3_use_https` | boolean in MB | Allow to use S3 implementation over HTTPS and not over HTTP.
+`cvmfs_s3_timeout` | integer | Timeout in seconds for the connection to the S3 server.
+`cvmfs_s3_max_retries` | integer | Number of retries for the connection to the S3 server.
+`cvmfs_s3_max_number_of_parallel_connections` | boolean | Number of parallel uploads to the S3 server, e.g. 400.
+`cvmfs_s3_dns_buckets` | boolean | Set to false to disable DNS-style bucket URLs (http://<bucket>.<host>/<object>). Enabled by default.
+`cvmfs_s3_peek_before_put` | boolean | Make PUT requests conditional to a prior HEAD request. Enabled by default.
+`cvmfs_s3_conf_path` | path | Path to store the CVMFS s3 config file. Default is `/etc/cvmfs/s3.conf`.
+
 
 [defaults]: https://github.com/galaxyproject/ansible-cvmfs/blob/master/defaults/main.yml
 [cvmfs-config-repo]: https://cvmfs.readthedocs.io/en/stable/cpt-configure.html#the-config-repository
 [preload]: http://cvmfs.readthedocs.io/en/stable/cpt-hpc.html
+[s3_config]: https://cvmfs.readthedocs.io/en/stable/cpt-repo.html#s3-compatible-storage-systems
 
 Dependencies
 ------------
@@ -201,6 +227,41 @@ defined as:
         key: |
           -----BEGIN PUBLIC KEY-----
           MIIBIjAN...
+```
+
+The following playbook shows an example of how to configure a stratum0/1 server with a custom S3 backend.
+
+```yaml
+- name: CVMFS
+  vars:
+    cvmfs_role: stratum1
+    cvmfs_backend: s3
+    cvmfs_config_apache: false
+    cvmfs_config_squid: false
+
+    cvmfs_s3_access_key: <your_access_key>
+    cvmfs_s3_secret_key: <your_secret_key>
+    cvmfs_s3_host: swift.rc.nectar.org.au
+    cvmfs_s3_port: 8888
+    cvmfs_s3_bucket: cvmfs
+    cvmfs_s3_bucket_url: https://object-store.rc.nectar.org.au/v1/AUTH_377/cvmfs
+    cvmfs_s3_use_https: true
+    cvmfs_s3_dns_buckets: false
+
+    galaxy_cvmfs_repos_enabled: true
+    # override the default
+    galaxy_cvmfs_server_urls:
+      - domain: galaxyproject.org
+        use_ssl_system_ca: true # Set this on both clients and servers to use system CA if accessing S3 byckets over https
+        urls:
+          - "http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@"
+          - "http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
+          - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
+          - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
+          - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
+  roles:
+    - galaxyproject.cvmfs
+  become: yes
 ```
 
 License

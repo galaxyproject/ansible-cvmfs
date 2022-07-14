@@ -24,11 +24,17 @@
 
 - name: Include Apache tasks
   include_tasks: apache.yml
+  when: cvmfs_backend == "filesystem" and cvmfs_config_apache
+
+- name: Include S3 tasks
+  include_tasks: s3.yml
+  when: cvmfs_backend in ["s3", "S3"]
 
 - name: Include squid tasks
   include_tasks: squid.yml
   vars:
     _cvmfs_squid_conf_src: "{{ cvmfs_squid_conf_src | default('stratum1_squid.conf.j2') }}"
+  when: cvmfs_config_squid
 
 - name: Include firewall tasks
   include_tasks: firewall.yml
@@ -47,6 +53,7 @@
 - name: Ensure replicas are configured
   command: >-
     /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }}
+      -s {{ cvmfs_s3_conf_path }} -w {{ cvmfs_s3_bucket_url }}
       http://{{ item.stratum0 }}/cvmfs/{{ item.repository }}
       {{ item.key_dir | default('/etc/cvmfs/keys') }}/{{ item.repository }}.pub
   args:

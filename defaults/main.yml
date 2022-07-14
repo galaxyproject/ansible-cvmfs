@@ -35,6 +35,28 @@ cvmfs_srv_mount: /srv
 
 cvmfs_union_fs: overlayfs
 cvmfs_config_apache: true
+cvmfs_config_squid: true
+
+# Backend can be filesystem or s3
+cvmfs_backend: filesystem
+# if s3, the following additional settings can be specified
+# docs: https://cvmfs.readthedocs.io/en/2.9/cpt-repo.html#s3-compatible-storage-systems
+cvmfs_s3_access_key:
+cvmfs_s3_secret_key:
+cvmfs_s3_host:
+cvmfs_s3_flavor: # optional: valid options are azure, awsv2 or awsv4
+cvmfs_s3_region:
+cvmfs_s3_port:
+cvmfs_s3_bucket:
+cvmfs_s3_bucket_url:
+cvmfs_s3_use_https:
+cvmfs_s3_timeout:
+cvmfs_s3_max_retries:
+cvmfs_s3_max_number_of_parallel_connections:
+cvmfs_s3_dns_buckets: # optional: use dns style buckets - true or false
+cvmfs_s3_peek_before_put:
+# the s3 settings above are stored in the following conf file for use by cvmfs
+cvmfs_s3_conf_path: /etc/cvmfs/s3.conf
 
 # Setup an optional cache directory for squid. Otherwise in-memory cache is used.
 # cvmfs_stratum1_cache_dir:
@@ -217,6 +239,7 @@ galaxy_cvmfs_keys:
 galaxy_cvmfs_server_urls:
   - domain: galaxyproject.org
     use_geoapi: false
+    use_ssl_system_ca: true
     urls:
       - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
       - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"

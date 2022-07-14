@@ -1,0 +1,6 @@
+---
+
+- name: Copy s3 config
+  template:
+    src: "cvmfs_s3.conf.j2"
+    dest: "{{ cvmfs_s3_conf_path }}"
