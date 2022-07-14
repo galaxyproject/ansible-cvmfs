@@ -28,6 +28,8 @@ cvmfs_upgrade_server: false
 # Install a setuid binary allowing unprivileged users to call `cvmfs_config wipecache` or `cvmfs_talk remount sync`?
 cvmfs_install_setuid_cvmfs_wipecache: no
 cvmfs_install_setuid_cvmfs_remount_sync: no
+# Used to select the right binaries in files/
+_cvmfs_install_setuid_platform: "{{ ((ansible_os_family == 'RedHat') | ternary('el', ansible_distribution)) | lower }}"
 
 # Block device to mkfs/mount on stratum0s/stratum1s
 #cvmfs_srv_device: false

@@ -14,7 +14,7 @@
 #include <stdbool.h>
 
 #define CVMFS_SOCK_PREFIX "/var/lib/cvmfs/shared/cvmfs_io."
-#define CVMFS_REPO_DIR "/etc/cvmfs/keys"
+#define CVMFS_REPO_DIR "/cvmfs"
 #define CVMFS_TALK_COMMAND "remount sync"
 
 void pdie(char *msg) {
@@ -34,15 +34,12 @@ bool checkrepo(char *repo) {
   DIR *dir;
   struct dirent *ent;
   bool r = false;
-  char crt[UNIX_PATH_MAX + 4];
 
   if ((dir = opendir(CVMFS_REPO_DIR)) == NULL)
     pdie("opendir() failed");
 
-  snprintf(crt, UNIX_PATH_MAX + 4, "%s.crt", repo);
-
   while ((ent = readdir(dir)))
-    if (!strcmp(ent->d_name, crt))
+    if (!strcmp(ent->d_name, repo))
       r = true;
 
   closedir(dir);
@@ -62,8 +59,10 @@ int main(int argc, char *argv[]) {
   if ((strlen(CVMFS_SOCK_PREFIX) + strlen(argv[1])) > UNIX_PATH_MAX)
     die("error: repo name exceeds max length of %i\n", UNIX_PATH_MAX);
 
-  if (!checkrepo(argv[1]))
-    die("error: invalid repo: %s\n", argv[1]);
+  if (!checkrepo(argv[1])) {
+    printf("warning: not found, invalid repo or not mounted: %s/%s\n", CVMFS_REPO_DIR, argv[1]);
+    return 0;
+  }
 
   if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
     pdie("error: socket() failed");

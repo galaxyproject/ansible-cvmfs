@@ -2,6 +2,7 @@
  * setuid binary for calling cvmfs_config wipecache
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
