@@ -33,6 +33,7 @@
 
 - name: Include Apache tasks
   include_tasks: apache.yml
+  when: "cvmfs_storage == 'disk'"
 
 - name: Include firewall tasks
   include_tasks: firewall.yml
@@ -41,15 +42,26 @@
   when: cvmfs_manage_firewall
 
 - name: Create repositories
-  command: /usr/bin/cvmfs_server mkfs {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
+  command: >-
+    /usr/bin/cvmfs_server mkfs
+      {{ cvmfs_storage_cli_options }}
+      {{ cvmfs_config_apache_flag }}
+      -o {{ item.owner | default('root') }}
+      -f {{ cvmfs_union_fs }}
+      {{ item.repository }}
   args:
-    creates: /srv/cvmfs/{{ item.repository }}
+    creates: "{{ '/srv/cvmfs/' ~ item.repository if (cvmfs_storage == 'disk') else '/etc/cvmfs/repositories.d/' ~ item.repository }}"
   with_items: "{{ cvmfs_repositories }}"
   notify:
     - restart apache
 
 - name: Ensure repositories are imported
-  command: /usr/bin/cvmfs_server import -r {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
+  command: >-
+    /usr/bin/cvmfs_server import -r
+      {{ cvmfs_config_apache_flag }}
+      -o {{ item.owner | default('root') }}
+      -f {{ cvmfs_union_fs }}
+      {{ item.repository }}
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"

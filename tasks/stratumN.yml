@@ -1,16 +1,44 @@
 ---
 
-- name: Create /srv filesystem
-  filesystem:
-    dev: "{{ cvmfs_srv_device }}"
-    force: no
-    fstype: "{{ cvmfs_srv_fstype | default('ext4') }}"
-  when: cvmfs_srv_device is defined
+- name: Disk storage tasks
+  block:
 
-- name: Mount /srv
-  mount:
-    name: "{{ cvmfs_srv_mount }}"
-    src: "{{ cvmfs_srv_device }}"
-    fstype: "{{ cvmfs_srv_fstype | default('ext4') }}"
-    state: mounted
-  when: cvmfs_srv_device is defined
+    - name: Create /srv filesystem
+      filesystem:
+        dev: "{{ cvmfs_srv_device }}"
+        force: no
+        fstype: "{{ cvmfs_srv_fstype | default('ext4') }}"
+
+    - name: Mount /srv
+      mount:
+        name: "{{ cvmfs_srv_mount }}"
+        src: "{{ cvmfs_srv_device }}"
+        fstype: "{{ cvmfs_srv_fstype | default('ext4') }}"
+        state: mounted
+
+  when: cvmfs_storage == 'disk' and cvmfs_srv_device is defined
+
+- name: S3 storage tasks
+  block:
+
+    - name: Create s3.conf
+      template:
+        src: s3.conf.j2
+        dest: /etc/cvmfs/s3.conf
+        mode: "{{ cvmfs_s3_config_mode | default('0600') }}"
+        owner: root
+        group: "{{ cvmfs_s3_config_group | default('root') }}"
+
+    - name: Set ACL for CVMFS repository owners to access s3.conf
+      acl:
+        path: /etc/cvmfs/s3.conf
+        entity: "{{ item.owner }}"
+        etype: user
+        permissions: r
+        state: present
+      loop: "{{ cvmfs_repositories }}"
+      when: "cvmfs_set_s3_config_acl and item.owner != 'root'"
+      loop_control:
+        label: "{{ item.repository }}: {{ item.owner }}"
+
+  when: cvmfs_storage == 's3'

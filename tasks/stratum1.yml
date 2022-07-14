@@ -3,7 +3,7 @@
 - name: Include initial OS-specific tasks
   include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
-    _cvmfs_role: stratum1
+    _cvmfs_role: "stratum1-{{ cvmfs_storage }}"
     _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
 
 - name: Include key setup tasks
@@ -24,11 +24,13 @@
 
 - name: Include Apache tasks
   include_tasks: apache.yml
+  when: "cvmfs_storage == 'disk'"
 
 - name: Include squid tasks
   include_tasks: squid.yml
   vars:
     _cvmfs_squid_conf_src: "{{ cvmfs_squid_conf_src | default('stratum1_squid.conf.j2') }}"
+  when: "cvmfs_storage == 'disk'"
 
 - name: Include firewall tasks
   include_tasks: firewall.yml
@@ -47,6 +49,7 @@
 - name: Ensure replicas are configured
   command: >-
     /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }}
+      {{ cvmfs_storage_cli_options }}
       http://{{ item.stratum0 }}/cvmfs/{{ item.repository }}
       {{ item.key_dir | default('/etc/cvmfs/keys') }}/{{ item.repository }}.pub
   args:

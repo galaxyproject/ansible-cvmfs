@@ -21,6 +21,23 @@ cvmfs_localproxy_http_ports:
 cvmfs_stratum1_apache_port: 8008
 cvmfs_stratum1_cache_mem: 128 #MB
 
+# Storage backend for Stratum 0/1 servers
+# Can be "disk" (/srv) or "s3" (see: https://cvmfs.readthedocs.io/en/stable/cpt-repo.html#s3-compatible-storage-systems)
+cvmfs_storage: disk
+# The contents of the S3 config file passed as the -s option to cvmfs_server mkfs/add-replica. Dictionary keys are
+# option names (e.g. CVMFS_S3_HOST) and values are the option values
+cvmfs_s3_config: {}
+
+# Use POSIX ACLs to allow access to s3.conf by repository owners (access is required if any owners are non-root), if you
+# don't want to use ACLs, the cvmfs_s3_config_mode and cvmfs_s3_config_group variables can be used (you are responsible
+# for setting up and controlling membership of the group).
+cvmfs_set_s3_config_acl: true
+
+# The -w option to cvmfs_server mkfs/add-replica
+cvmfs_s3_url: null
+# The actual options added to cvmfs_server mkfs/add-replica
+cvmfs_storage_cli_options: "{% if cvmfs_storage == 's3' %}-s /etc/cvmfs/s3.conf -w {{ cvmfs_s3_url }}{% endif %}"
+
 # Whether the client or server should be upgraded or just installed if missing
 cvmfs_upgrade_client: false
 cvmfs_upgrade_server: false
