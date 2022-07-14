@@ -1,10 +1,17 @@
 ---
 
-- name: Configure CernVM yum repositories
-  action:
-    module: yum_repository
-  args:
+- name: Remove legacy yum repo file if present
+  yum_repository:
     file: "cernvm.repo"
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - cernvm
+    - cernvm-config
+
+- name: Configure CernVM yum repositories
+  yum_repository:
+    file: "cernvm"
     name: "{{ item.name }}"
     description: "{{ item.description }}"
     baseurl: "{{ item.baseurl }}"
@@ -12,7 +19,7 @@
     gpgcheck: yes
     enabled: yes
     protect: yes
-  with_items:
+  loop:
     - name: cernvm
       description: "CernVM packages"
       baseurl: "http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/"
