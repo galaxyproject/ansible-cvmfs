@@ -3,13 +3,11 @@
 - name: Make CernVM-FS key directories
   file:
     state: directory
-    path: "{{ item.path | dirname }}"
+    path: "{{ item }}"
     owner: root
     group: root
     mode: 0755
-  with_items: "{{ cvmfs_keys }}"
-  loop_control:
-    label: "{{ item.path }}"
+  loop: "{{ cvmfs_keys | map(attribute='path') | map('dirname') | unique }}"
 
 - name: Install CernVM-FS keys
   copy:
@@ -18,6 +16,6 @@
     owner: "{{ item.owner | default('root') }}"
     group: root
     mode: 0444
-  with_items: "{{ cvmfs_keys }}"
+  loop: "{{ cvmfs_keys }}"
   loop_control:
     label: "{{ item.path }}"
