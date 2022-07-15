@@ -93,7 +93,7 @@
 
 - name: Install cvmfs_wipecache setuid binary
   copy:
-    src: cvmfs_wipecache.{{ ansible_distribution | lower }}_{{ ansible_distribution_major_version }}
+    src: cvmfs_wipecache.{{ _cvmfs_install_setuid_platform }}_{{ ansible_distribution_major_version }}
     dest: /usr/local/bin/cvmfs_wipecache
     owner: root
     group: root
@@ -108,7 +108,7 @@
 
 - name: Install cvmfs_remount_sync setuid binary
   copy:
-    src: cvmfs_remount_sync.{{ ansible_distribution | lower }}_{{ ansible_distribution_major_version }}
+    src: cvmfs_remount_sync.{{ _cvmfs_install_setuid_platform }}_{{ ansible_distribution_major_version }}
     dest: /usr/local/bin/cvmfs_remount_sync
     owner: root
     group: root
