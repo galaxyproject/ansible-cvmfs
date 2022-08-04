@@ -18,7 +18,7 @@
 
 - name: Set facts for CVMFS config repository, if enabled
   set_fact:
-    cvmfs_keys: "{{ cvmfs_keys + galaxy_cvmfs_keys }}"
+    cvmfs_keys: "{{ cvmfs_keys + [cvmfs_config_repo.key] }}"
   # In Ansible >= 2.10 this will be | truthy
   when: cvmfs_config_repo | length > 0
 
