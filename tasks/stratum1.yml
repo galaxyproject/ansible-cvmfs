@@ -99,7 +99,12 @@
         output=$(
         {{- ("X509_CERT_BUNDLE=" ~ cvmfs_x509_cert_bundle | quote) ~ " " if cvmfs_x509_cert_bundle is defined else "" -}}
         /usr/bin/cvmfs_server snapshot -a -i 2>&1) || echo "$output"
-    minute: "*/5"
+    hour: "{{ cvmfs_stratum1_snapshot_time.hour | default(omit) }}"
+    minute: "{{ cvmfs_stratum1_snapshot_time.minute | default(omit) }}"
+    day: "{{ cvmfs_stratum1_snapshot_time.day | default(omit) }}"
+    month: "{{ cvmfs_stratum1_snapshot_time.month | default(omit) }}"
+    weekday: "{{ cvmfs_stratum1_snapshot_time.weekday | default(omit) }}"
+    special_time: "{{ cvmfs_stratum1_snapshot_time.special_time | default(omit) }}"
 
 - name: Schedule GeoIP database updates
   cron:
