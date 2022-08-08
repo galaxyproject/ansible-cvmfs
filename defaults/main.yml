@@ -21,6 +21,27 @@ cvmfs_localproxy_http_ports:
 cvmfs_stratum1_apache_port: 8008
 cvmfs_stratum1_cache_mem: 128 #MB
 
+# Stratum 1 snapshot cron job timing, hash keys correspond to the cron module options:
+#   https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html
+#
+#cvmfs_stratum1_snapshot_time:
+#  special_time:
+#  hour:
+#  minute:
+#  day:
+#  month:
+#  weekday:
+#
+# e.g. for every 2 hours at 15 past:
+#cvmfs_stratum1_snapshot_time:
+#  hour: */2
+#  minute: 15
+#
+# Use @hourly by default:
+cvmfs_stratum1_snapshot_time:
+  special_time: hourly
+
+
 # Whether the client or server should be upgraded or just installed if missing
 cvmfs_upgrade_client: false
 cvmfs_upgrade_server: false
@@ -63,21 +84,7 @@ cvmfs_gc_user: root
 # or the job will fail
 cvmfs_gc_options: "-a -f -L {{ cvmfs_gc_log }}"
 
-# Garbage collection cron job timing, hash keys correspond to the cron module options:
-#   https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html
-#
-#cvmfs_gc_time:
-#  special_time:
-#  hour:
-#  minute:
-#  day:
-#  month:
-#  weekday:
-#
-# e.g. for 3 AM nightly:
-#cvmfs_gc_time:
-#  hour: 3
-#  minute: 0
+# Garbage collection cron job timing, see cvmfs_stratum1_snapshot_time for syntax
 #
 # Use @weekly by default:
 cvmfs_gc_time:
