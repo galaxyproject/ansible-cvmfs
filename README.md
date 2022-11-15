@@ -212,6 +212,6 @@ Author Information
 ------------------
 
 [Nate Coraor](https://github.com/natefoo)
-[Helena Rasche](https://github.com/erasche)
+[Helena Rasche](https://github.com/hexylena)
 
 [View contributors on GitHub](https://github.com/galaxyproject/ansible-cvmfs/graphs/contributors)

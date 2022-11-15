@@ -16,7 +16,7 @@ cvmfs_packages:
     - cvmfs
   stratum1:
     - httpd
-    - mod_wsgi
+    - "{{ 'mod_wsgi' if ansible_distribution_major_version is version('8', '<') else 'python3-mod_wsgi' }}"
     - squid
     - cvmfs-server
     - cvmfs-config-default

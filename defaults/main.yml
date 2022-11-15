@@ -21,6 +21,27 @@ cvmfs_localproxy_http_ports:
 cvmfs_stratum1_apache_port: 8008
 cvmfs_stratum1_cache_mem: 128 #MB
 
+# Stratum 1 snapshot cron job timing, hash keys correspond to the cron module options:
+#   https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html
+#
+#cvmfs_stratum1_snapshot_time:
+#  special_time:
+#  hour:
+#  minute:
+#  day:
+#  month:
+#  weekday:
+#
+# e.g. for every 2 hours at 15 past:
+#cvmfs_stratum1_snapshot_time:
+#  hour: */2
+#  minute: 15
+#
+# Use @hourly by default:
+cvmfs_stratum1_snapshot_time:
+  special_time: hourly
+
+
 # Whether the client or server should be upgraded or just installed if missing
 cvmfs_upgrade_client: false
 cvmfs_upgrade_server: false
@@ -28,6 +49,8 @@ cvmfs_upgrade_server: false
 # Install a setuid binary allowing unprivileged users to call `cvmfs_config wipecache` or `cvmfs_talk remount sync`?
 cvmfs_install_setuid_cvmfs_wipecache: no
 cvmfs_install_setuid_cvmfs_remount_sync: no
+# Used to select the right binaries in files/
+_cvmfs_install_setuid_platform: "{{ ((ansible_os_family == 'RedHat') | ternary('el', ansible_distribution)) | lower }}"
 
 # Block device to mkfs/mount on stratum0s/stratum1s
 #cvmfs_srv_device: false
@@ -44,6 +67,28 @@ cvmfs_config_apache: true
 # You can manually specify a role if you don't want to or cannot use the
 # group_names
 cvmfs_role: '' # (client, Or stratum1 or stratum0 or localproxy)
+
+# Specify whether `cvmfs_server gc -a` should be run from cron to garbage collect all repos on the server, disable this
+# option if your repos don't use CVMFS_AUTO_GC=false.
+cvmfs_gc_enabled: true
+
+# Garbage collection log path (directory will be created if necessary). This is the default path but CVMFS packages
+# don't precreate the directory for you so `cvmfs_server gc -a` will fail by default.
+cvmfs_gc_log: /var/log/cvmfs/gc.log
+
+# User to run garbage collection as. This user must have permission to gc all repositories on the server (i.e. it should
+# be `root` if you have repositories owned by multiple users)
+cvmfs_gc_user: root
+
+# Specify the options passed to `cvmfs_server gc`. If you override these you will need to include `-a -f` in your value
+# or the job will fail
+cvmfs_gc_options: "-a -f -L {{ cvmfs_gc_log }}"
+
+# Garbage collection cron job timing, see cvmfs_stratum1_snapshot_time for syntax
+#
+# Use @weekly by default:
+cvmfs_gc_time:
+  special_time: weekly
 
 # Optionally download the preload utility
 cvmfs_preload_install: false

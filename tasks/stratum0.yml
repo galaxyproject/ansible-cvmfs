@@ -88,3 +88,4 @@
 
 - name: Include garbage collection tasks
   include_tasks: gc.yml
+  when: cvmfs_gc_enabled
