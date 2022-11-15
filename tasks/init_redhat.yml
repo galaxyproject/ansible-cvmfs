@@ -15,10 +15,10 @@
   with_items:
     - name: cernvm
       description: "CernVM packages"
-      baseurl: "http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/"
+      baseurl: "http://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/"
     - name: cernvm-config
       description: "CernVM-FS extra config packages"
-      baseurl: "http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/"
+      baseurl: "http://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/"
 
 - name: Install CernVM yum key
   copy:

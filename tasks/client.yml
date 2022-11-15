@@ -123,7 +123,7 @@
 
 - name: Download cvmfs_preload utility when desired
   get_url:
-    url: https://cvmrepo.web.cern.ch/cvmrepo/preload/cvmfs_preload
+    url: https://cvmrepo.s3.cern.ch/cvmrepo/preload/cvmfs_preload
     dest: "{{ cvmfs_preload_path }}/cvmfs_preload"
     owner: root
     group: root
