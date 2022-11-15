@@ -8,20 +8,20 @@
 
 - name: Install CernVM apt key
   apt_key:
-    url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
+    url: https://cvmrepo.s3.cern.ch/cvmrepo/apt/cernvm.gpg
 
 - name: Configure CernVM apt repository
   apt_repository:
     filename: "cernvm.list"
     mode: 422
-    repo: "deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
+    repo: "deb [allow-insecure=true] https://cvmrepo.s3.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
   when: ansible_distribution != 'Ubuntu'
 
 - name: Configure CernVM apt repository
   apt_repository:
     filename: "cernvm.list"
     mode: 422
-    repo: "deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
+    repo: "deb [allow-insecure=true] https://cvmrepo.s3.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('bionic', 'xenial', 'precise', 'focal', 'jammy')
 
   # There are no packages for any of the non LTS versions so good
@@ -30,7 +30,7 @@
   apt_repository:
     filename: "cernvm.list"
     mode: 422
-    repo: "deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ xenial-prod main"
+    repo: "deb [allow-insecure=true] https://cvmrepo.s3.cern.ch/cvmrepo/apt/ xenial-prod main"
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release not in ('bionic', 'xenial', 'precise', 'focal', 'jammy')
 
 - name: Install CernVM-FS packages and dependencies (apt)
