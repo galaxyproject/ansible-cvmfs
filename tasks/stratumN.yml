@@ -1,9 +1,8 @@
 ---
-
 - name: Create /srv filesystem
   ansible.builtin.filesystem:
     dev: "{{ cvmfs_srv_device }}"
-    force: no
+    force: false
     fstype: "{{ cvmfs_srv_fstype | default('ext4') }}"
   when: cvmfs_srv_device is defined
 

@@ -41,14 +41,13 @@ cvmfs_stratum1_cache_mem: 128 #MB
 cvmfs_stratum1_snapshot_time:
   special_time: hourly
 
-
 # Whether the client or server should be upgraded or just installed if missing
 cvmfs_upgrade_client: false
 cvmfs_upgrade_server: false
 
 # Install a setuid binary allowing unprivileged users to call `cvmfs_config wipecache` or `cvmfs_talk remount sync`?
-cvmfs_install_setuid_cvmfs_wipecache: no
-cvmfs_install_setuid_cvmfs_remount_sync: no
+cvmfs_install_setuid_cvmfs_wipecache: false
+cvmfs_install_setuid_cvmfs_remount_sync: false
 # Used to select the right binaries in files/
 _cvmfs_install_setuid_platform: "{{ ((ansible_os_family == 'RedHat') | ternary('el', ansible_distribution)) | lower }}"
 
@@ -66,7 +65,7 @@ cvmfs_config_apache: true
 
 # You can manually specify a role if you don't want to or cannot use the
 # group_names
-cvmfs_role: '' # (client, Or stratum1 or stratum0 or localproxy)
+cvmfs_role: "" # (client, Or stratum1 or stratum0 or localproxy)
 
 # Specify whether `cvmfs_server gc -a` should be run from cron to garbage collect all repos on the server, disable this
 # option if your repos don't use CVMFS_AUTO_GC=false.
@@ -82,7 +81,7 @@ cvmfs_gc_user: root
 
 # Specify the options passed to `cvmfs_server gc`. If you override these you will need to include `-a -f` in your value
 # or the job will fail
-cvmfs_gc_options: "-a -f -L {{ cvmfs_gc_log }}"
+cvmfs_gc_options: -a -f -L {{ cvmfs_gc_log }}
 
 # Garbage collection cron job timing, see cvmfs_stratum1_snapshot_time for syntax
 #
@@ -96,7 +95,6 @@ cvmfs_preload_path: /usr/bin
 
 # Support for CVMFS config repositories - see galaxy_cvmfs_config_repo for syntax
 cvmfs_config_repo: {}
-
 # CVMFS_CONFIG_REPOSITORY is not supported on Debian < 9, Ubuntu LTS < 18.04
 cvmfs_config_repo_supported: >-
   {{
@@ -141,18 +139,17 @@ galaxy_cvmfs_config_repo:
       dQIDAQAB
       -----END PUBLIC KEY-----
   urls:
-    - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
-    - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
-    - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
-    - "http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
-    - "http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@"
+    - http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@
+    - http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@
+    - http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@
+    - http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@
+    - http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@
   repository:
     repository: cvmfs-config.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
     owner: "{{ cvmfs_repo_owner | default('root') }}"
     server_options: []
     client_options: []
-
 # Defaults for galaxyproject.org repos
 galaxy_cvmfs_keys:
   # This will become the key for all repos, currently cvmfs-config and singularity
@@ -227,11 +224,11 @@ galaxy_cvmfs_server_urls:
   - domain: galaxyproject.org
     use_geoapi: false
     urls:
-      - "http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@"
-      - "http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@"
-      - "http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@"
-      - "http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@"
-      - "http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@"
+      - http://cvmfs1-psu0.galaxyproject.org/cvmfs/@fqrn@
+      - http://cvmfs1-iu0.galaxyproject.org/cvmfs/@fqrn@
+      - http://cvmfs1-tacc0.galaxyproject.org/cvmfs/@fqrn@
+      - http://cvmfs1-mel0.gvl.org.au/cvmfs/@fqrn@
+      - http://cvmfs1-ufr0.galaxyproject.eu/cvmfs/@fqrn@
 
 galaxy_cvmfs_repositories:
   - repository: test.galaxyproject.org

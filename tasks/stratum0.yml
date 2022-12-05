@@ -1,5 +1,4 @@
 ---
-
 # TODO: `systemctl unmask tmp.mount` to make /tmp tmpfs (`cvmfs_server import`
 # fails if /tmp is xfs, although for some reason was fine on the PSU stratum 0
 # w/ xfs /tmp).
@@ -9,7 +8,7 @@
     cvmfs_config_apache_flag: "{{ '-p' if not cvmfs_config_apache else '' }}"
 
 - name: Include initial OS-specific tasks
-  ansible.builtin.include_tasks: "init_{{ ansible_os_family | lower }}.yml"
+  ansible.builtin.include_tasks: init_{{ ansible_os_family | lower }}.yml
   vars:
     _cvmfs_role: stratum0
     _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
@@ -22,7 +21,7 @@
     content: "{{ item.key }}"
     dest: "{{ item.path }}"
     owner: "{{ item.owner | default('root') }}"
-    group: "root"
+    group: root
     mode: "0400"
   with_items: "{{ cvmfs_private_keys }}"
   loop_control:
@@ -68,8 +67,8 @@
 
 - name: Increase default max file descriptor limit
   ansible.builtin.lineinfile:
-    dest: "/etc/security/limits.conf"
-    regexp: '^\*\s+{{ item }}\s+nofile\s+\d+$'
+    dest: /etc/security/limits.conf
+    regexp: ^\*\s+{{ item }}\s+nofile\s+\d+$
     line: "*               {{ item }}    nofile          {{ cvmfs_numfiles }}"
   with_items:
     - soft
@@ -78,13 +77,13 @@
 
 - name: Schedule key resignings
   ansible.builtin.cron:
-    name: "Re-sign CVMFS keys"
-    cron_file: "ansible_cvmfs_key_resign"
-    user: "root"
+    name: Re-sign CVMFS keys
+    cron_file: ansible_cvmfs_key_resign
+    user: root
     hour: 11
     minute: 0
     weekday: 2
-    job: "/usr/bin/cvmfs_server resign {{ cvmfs_repositories | join(' ; /usr/bin/cvmfs_server resign ', attribute='repository' ) }}"
+    job: /usr/bin/cvmfs_server resign {{ cvmfs_repositories | join(' ; /usr/bin/cvmfs_server resign ', attribute='repository' ) }}
 
 - name: Include garbage collection tasks
   ansible.builtin.include_tasks: gc.yml

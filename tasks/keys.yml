@@ -1,5 +1,4 @@
 ---
-
 - name: Make CernVM-FS key directories
   file:
     state: directory

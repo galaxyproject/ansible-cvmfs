@@ -1,5 +1,4 @@
 ---
-
 # gc -a support implemented in 2021/02, this task can be removed at some later date
 - name: Remove per-repository garbage collection cron jobs
   ansible.builtin.file:

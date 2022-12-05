@@ -1,8 +1,7 @@
 ---
-
 - name: Remove legacy yum repo file if present
   ansible.builtin.yum_repository:
-    file: "cernvm.repo"
+    file: cernvm.repo
     name: "{{ item }}"
     state: absent
   loop:
@@ -11,21 +10,21 @@
 
 - name: Configure CernVM yum repositories
   ansible.builtin.yum_repository:
-    file: "cernvm"
+    file: cernvm
     name: "{{ item.name }}"
     description: "{{ item.description }}"
     baseurl: "{{ item.baseurl }}"
-    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM"
-    gpgcheck: yes
-    enabled: yes
-    protect: yes
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
+    gpgcheck: true
+    enabled: true
+    protect: true
   loop:
     - name: cernvm
-      description: "CernVM packages"
-      baseurl: "http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/"
+      description: CernVM packages
+      baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/
     - name: cernvm-config
-      description: "CernVM-FS extra config packages"
-      baseurl: "http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/"
+      description: CernVM-FS extra config packages
+      baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/
 
 - name: Install CernVM yum key
   ansible.builtin.copy:
@@ -60,9 +59,9 @@
       AJ9e1y70yIKwx6YmpDnwqWSE07Q6lACdEnem0DbLg9t+gkX/98driCP9Ifg=
       =S7Dt
       -----END PGP PUBLIC KEY BLOCK-----
-    dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM"
-    owner: "root"
-    group: "root"
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
+    owner: root
+    group: root
     mode: "0644"
 
 - name: Install CernVM-FS packages and dependencies (yum)

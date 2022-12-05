@@ -1,10 +1,9 @@
 ---
-
 - name: Configure squid
   ansible.builtin.template:
     src: "{{ _cvmfs_squid_conf_src }}"
     dest: "{{ cvmfs_squid_conf_file }}"
-    backup: yes
+    backup: true
     mode: 0644
   notify:
     - restart squid
@@ -31,4 +30,4 @@
   ansible.builtin.service:
     name: "{{ cvmfs_squid_service_name }}"
     state: started
-    enabled: yes
+    enabled: true

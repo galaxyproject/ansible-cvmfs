@@ -1,5 +1,4 @@
 ---
-
 cvmfs_apache_service_name: httpd
 cvmfs_apache_conf_file: /etc/httpd/conf/httpd.conf
 

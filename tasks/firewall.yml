@@ -1,11 +1,10 @@
 ---
-
 - name: Ensure http is not firewalled (firewalld)
   ansible.builtin.firewalld:
     port: "{{ item }}/tcp"
     state: enabled
-    permanent: yes
-    immediate: yes
+    permanent: true
+    immediate: true
   with_items: "{{ _cvmfs_http_ports }}"
   when: ansible_os_family == "RedHat"
 
