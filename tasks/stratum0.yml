@@ -40,7 +40,8 @@
   when: cvmfs_manage_firewall
 
 - name: Create repositories
-  ansible.builtin.command: /usr/bin/cvmfs_server mkfs {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
+  ansible.builtin.command: |
+    /usr/bin/cvmfs_server mkfs {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
   args:
     creates: /srv/cvmfs/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
@@ -48,7 +49,8 @@
     - restart apache
 
 - name: Ensure repositories are imported
-  ansible.builtin.command: /usr/bin/cvmfs_server import -r {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
+  ansible.builtin.command: |
+    /usr/bin/cvmfs_server import -r {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
