@@ -1,5 +1,7 @@
+---
 name: ansible-lint
-on: [pull_request_target]
+on: [pull_request_target, push]
+
 jobs:
   ansible-lint:
     name: ansible-lint
@@ -12,7 +14,7 @@ jobs:
           python-version: '3.x'
 
       - name: ansible-lint
-        uses: reviewdog/action-ansiblelint@v1.4.2
+        uses: reviewdog/action-ansiblelint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
