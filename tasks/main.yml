@@ -22,14 +22,18 @@
   # In Ansible >= 2.10 this will be | truthy
   when: cvmfs_config_repo | length > 0
 
-- ansible.builtin.include_tasks: client.yml
+- name: Include Client Tasks
+  ansible.builtin.include_tasks: client.yml
   when: "'cvmfsclients' in group_names or cvmfs_role == 'client'"
 
-- ansible.builtin.include_tasks: stratum1.yml
+- name: Include Stratum1 Tasks
+  ansible.builtin.include_tasks: stratum1.yml
   when: "'cvmfsstratum1servers' in group_names or cvmfs_role == 'stratum1'"
 
-- ansible.builtin.include_tasks: stratum0.yml
+- name: Include Stratum0 Tasks
+  ansible.builtin.include_tasks: stratum0.yml
   when: "'cvmfsstratum0servers' in group_names or cvmfs_role == 'stratum0'"
 
-- ansible.builtin.include_tasks: localproxy.yml
+- name: Include localproxy Tasks
+  ansible.builtin.include_tasks: localproxy.yml
   when: "'cvmfslocalproxies' in group_names or cvmfs_role == 'localproxy'"

@@ -1,6 +1,6 @@
 ---
 - name: Make CernVM-FS key directories
-  file:
+  ansible.builtin.file:
     state: directory
     path: "{{ item }}"
     owner: root
@@ -9,7 +9,7 @@
   loop: "{{ cvmfs_keys | map(attribute='path') | map('dirname') | unique }}"
 
 - name: Install CernVM-FS keys
-  copy:
+  ansible.builtin.copy:
     content: "{{ item.key }}"
     dest: "{{ item.path }}"
     owner: "{{ item.owner | default('root') }}"

@@ -1,6 +1,6 @@
 ---
 - name: Ensure http is not firewalled (firewalld)
-  ansible.builtin.firewalld:
+  ansible.posix.firewalld:
     port: "{{ item }}/tcp"
     state: enabled
     permanent: true
@@ -9,7 +9,7 @@
   when: ansible_os_family == "RedHat"
 
 - name: Ensure http is not firewalled (ufw)
-  ansible.builtin.ufw:
+  community.general.system.ufw:
     rule: allow
     port: "{{ item }}"
     proto: tcp

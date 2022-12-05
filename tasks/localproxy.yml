@@ -11,13 +11,13 @@
     _cvmfs_squid_conf_src: "{{ cvmfs_squid_conf_src | default('localproxy_squid.conf.j2') }}"
 
 # Need to double check that this actually works (see the hosts_file directive)
-#- name: Create squid hosts file
-#  copy:
-#    content: |
-#      {{ inventory_hostname }} 127.0.0.1
-#    dest: /etc/squid/hosts
-#  notify:
-#    - restart squid
+# - name: Create squid hosts file
+#   copy:
+#     content: |
+#       {{ inventory_hostname }} 127.0.0.1
+#     dest: /etc/squid/hosts
+#   notify:
+#     - restart squid
 
 - name: Include firewall tasks
   ansible.builtin.include_tasks: firewall.yml

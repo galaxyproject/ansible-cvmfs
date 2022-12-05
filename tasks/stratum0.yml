@@ -85,7 +85,7 @@
     hour: 11
     minute: 0
     weekday: 2
-    job: /usr/bin/cvmfs_server resign {{ cvmfs_repositories | join(' ; /usr/bin/cvmfs_server resign ', attribute='repository' ) }}
+    job: /usr/bin/cvmfs_server resign {{ cvmfs_repositories | join(' ; /usr/bin/cvmfs_server resign ', attribute='repository') }}
 
 - name: Include garbage collection tasks
   ansible.builtin.include_tasks: gc.yml
