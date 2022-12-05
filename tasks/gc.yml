@@ -2,20 +2,21 @@
 
 # gc -a support implemented in 2021/02, this task can be removed at some later date
 - name: Remove per-repository garbage collection cron jobs
-  file:
+  ansible.builtin.file:
     path: /etc/cron.d/cvmfs_gc_{{ item.repository }}
     state: absent
+    mode: 0644
   loop: "{{ cvmfs_repositories }}"
 
 - name: Create garbage collection log directory
-  file:
+  ansible.builtin.file:
     path: "{{ cvmfs_gc_log | dirname }}"
     state: directory
     owner: "{{ cvmfs_gc_user }}"
     mode: 0755
 
 - name: Schedule garbage collection
-  cron:
+  ansible.builtin.cron:
     name: cvmfs_gc_all
     cron_file: ansible_cvmfs_gc_all
     user: "{{ cvmfs_gc_user }}"

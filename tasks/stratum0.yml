@@ -5,20 +5,20 @@
 # w/ xfs /tmp).
 
 - name: Determine whether -p flag is needed for cvmfs_server mkfs or import
-  set_fact:
+  ansible.builtin.set_fact:
     cvmfs_config_apache_flag: "{{ '-p' if not cvmfs_config_apache else '' }}"
 
 - name: Include initial OS-specific tasks
-  include_tasks: "init_{{ ansible_os_family | lower }}.yml"
+  ansible.builtin.include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
     _cvmfs_role: stratum0
     _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
 
 - name: Include key setup tasks
-  include_tasks: keys.yml
+  ansible.builtin.include_tasks: keys.yml
 
 - name: Install CernVM-FS private keys
-  copy:
+  ansible.builtin.copy:
     content: "{{ item.key }}"
     dest: "{{ item.path }}"
     owner: "{{ item.owner | default('root') }}"
@@ -29,19 +29,19 @@
     label: "{{ item.path }}"
 
 - name: Include stratumN tasks
-  include_tasks: stratumN.yml
+  ansible.builtin.include_tasks: stratumN.yml
 
 - name: Include Apache tasks
-  include_tasks: apache.yml
+  ansible.builtin.include_tasks: apache.yml
 
 - name: Include firewall tasks
-  include_tasks: firewall.yml
+  ansible.builtin.include_tasks: firewall.yml
   vars:
     _cvmfs_http_ports: "{{ cvmfs_stratum0_http_ports }}"
   when: cvmfs_manage_firewall
 
 - name: Create repositories
-  command: /usr/bin/cvmfs_server mkfs {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
+  ansible.builtin.command: /usr/bin/cvmfs_server mkfs {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
   args:
     creates: /srv/cvmfs/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
@@ -49,7 +49,7 @@
     - restart apache
 
 - name: Ensure repositories are imported
-  command: /usr/bin/cvmfs_server import -r {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
+  ansible.builtin.command: /usr/bin/cvmfs_server import -r {{ cvmfs_config_apache_flag }} -o {{ item.owner | default('root') }} -f {{ cvmfs_union_fs }} {{ item.repository }}
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
@@ -57,17 +57,17 @@
     - restart apache
 
 - name: Include repository server options tasks
-  include_tasks: options.yml
+  ansible.builtin.include_tasks: options.yml
   vars:
     _cvmfs_repo_option_key: server
 
 - name: Include repository client options tasks
-  include_tasks: options.yml
+  ansible.builtin.include_tasks: options.yml
   vars:
     _cvmfs_repo_option_key: client
 
 - name: Increase default max file descriptor limit
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/etc/security/limits.conf"
     regexp: '^\*\s+{{ item }}\s+nofile\s+\d+$'
     line: "*               {{ item }}    nofile          {{ cvmfs_numfiles }}"
@@ -77,7 +77,7 @@
   when: cvmfs_numfiles is defined
 
 - name: Schedule key resignings
-  cron:
+  ansible.builtin.cron:
     name: "Re-sign CVMFS keys"
     cron_file: "ansible_cvmfs_key_resign"
     user: "root"
@@ -87,5 +87,5 @@
     job: "/usr/bin/cvmfs_server resign {{ cvmfs_repositories | join(' ; /usr/bin/cvmfs_server resign ', attribute='repository' ) }}"
 
 - name: Include garbage collection tasks
-  include_tasks: gc.yml
+  ansible.builtin.include_tasks: gc.yml
   when: cvmfs_gc_enabled

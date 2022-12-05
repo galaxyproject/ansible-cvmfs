@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure per-repository directories exist for repositories with {{ _cvmfs_repo_option_key }} options defined
-  file:
+  ansible.builtin.file:
     path: "/etc/cvmfs/repositories.d/{{ item.repository }}"
     mode: 0755
     state: directory
@@ -11,7 +11,7 @@
   when: "_cvmfs_repo_option_key ~ '_options' in item"
 
 - name: Set repository {{ _cvmfs_repo_option_key }} options
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/etc/cvmfs/repositories.d/{{ item.0.repository }}/{{ _cvmfs_repo_option_key }}.conf"
     regexp: "^{{ item.1.split('=')[0] }}=.*"
     line: "{{ item.1 }}"

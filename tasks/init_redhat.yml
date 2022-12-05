@@ -1,7 +1,7 @@
 ---
 
 - name: Remove legacy yum repo file if present
-  yum_repository:
+  ansible.builtin.yum_repository:
     file: "cernvm.repo"
     name: "{{ item }}"
     state: absent
@@ -10,7 +10,7 @@
     - cernvm-config
 
 - name: Configure CernVM yum repositories
-  yum_repository:
+  ansible.builtin.yum_repository:
     file: "cernvm"
     name: "{{ item.name }}"
     description: "{{ item.description }}"
@@ -28,7 +28,7 @@
       baseurl: "http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/"
 
 - name: Install CernVM yum key
-  copy:
+  ansible.builtin.copy:
     content: |
       -----BEGIN PGP PUBLIC KEY BLOCK-----
       Version: GnuPG v2.0.14 (GNU/Linux)
@@ -66,6 +66,6 @@
     mode: "0644"
 
 - name: Install CernVM-FS packages and dependencies (yum)
-  yum:
+  ansible.builtin.yum:
     name: "{{ cvmfs_packages[_cvmfs_role] }}"
     state: "{{ 'latest' if _cvmfs_upgrade else 'present' }}"

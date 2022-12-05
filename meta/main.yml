@@ -1,5 +1,6 @@
 galaxy_info:
   role_name: cvmfs
+  namespace: galaxyproject
   author: Nathan Coraor
   description: Install and configure CernVM-FS (CVMFS)
   company: Galaxy Project

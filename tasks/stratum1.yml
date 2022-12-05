@@ -1,16 +1,16 @@
 ---
 
 - name: Include initial OS-specific tasks
-  include_tasks: "init_{{ ansible_os_family | lower }}.yml"
+  ansible.builtin.include_tasks: "init_{{ ansible_os_family | lower }}.yml"
   vars:
     _cvmfs_role: stratum1
     _cvmfs_upgrade: "{{ cvmfs_upgrade_server }}"
 
 - name: Include key setup tasks
-  include_tasks: keys.yml
+  ansible.builtin.include_tasks: keys.yml
 
 - name: Change Apache listen port
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ cvmfs_apache_conf_file }}"
     line: "Listen {{ cvmfs_stratum1_apache_port }}"
     regexp: "^Listen\\s+"
@@ -20,24 +20,24 @@
     - reload apache
 
 - name: Include stratumN tasks
-  include_tasks: stratumN.yml
+  ansible.builtin.include_tasks: stratumN.yml
 
 - name: Include Apache tasks
-  include_tasks: apache.yml
+  ansible.builtin.include_tasks: apache.yml
 
 - name: Include squid tasks
-  include_tasks: squid.yml
+  ansible.builtin.include_tasks: squid.yml
   vars:
     _cvmfs_squid_conf_src: "{{ cvmfs_squid_conf_src | default('stratum1_squid.conf.j2') }}"
 
 - name: Include firewall tasks
-  include_tasks: firewall.yml
+  ansible.builtin.include_tasks: firewall.yml
   vars:
     _cvmfs_http_ports: "{{ cvmfs_http_ports | default(cvmfs_stratum1_http_ports) }}"
   when: cvmfs_manage_firewall
 
 - name: Install GeoIP API key
-  copy:
+  ansible.builtin.copy:
     content: |
       CVMFS_GEO_LICENSE_KEY="{{ cvmfs_geo_license_key }}"
     mode: 0400
@@ -45,7 +45,7 @@
   when: cvmfs_geo_license_key is defined
 
 - name: Ensure replicas are configured
-  command: >-
+  ansible.builtin.command: >-
     /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }}
       http://{{ item.stratum0 }}/cvmfs/{{ item.repository }}
       {{ item.key_dir | default('/etc/cvmfs/keys') }}/{{ item.repository }}.pub
@@ -59,7 +59,7 @@
 # Ideally we could use item.stratum0_url_scheme directly in `cvmfs_server add-replica` above, but it appears not to
 # support it, so we instead have to change it after the fact
 - name: Configure replica stratum0 URLs
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/cvmfs/repositories.d/{{ item.repository }}/server.conf
     regexp: '^CVMFS_STRATUM0=https?://[^/]+/(.*)'
     line: 'CVMFS_STRATUM0={{ item.stratum0_url_scheme | default("http") }}://{{ item.stratum0 }}/\1'
@@ -67,12 +67,12 @@
   loop: "{{ cvmfs_repositories }}"
 
 - name: Include repository server options tasks
-  include_tasks: options.yml
+  ansible.builtin.include_tasks: options.yml
   vars:
     _cvmfs_repo_option_key: server
 
 - name: Perform initial snapshot
-  command: /usr/bin/cvmfs_server snapshot {{ item.item.repository }}
+  ansible.builtin.command: /usr/bin/cvmfs_server snapshot {{ item.item.repository }}
   loop: "{{ __cvmfs_add_replica_result.results }}"
   loop_control:
     label: "{{ item.item.repository }}"
@@ -81,7 +81,7 @@
   when: item is changed
 
 - name: Create CVMFS stratum1 logrotate configuration
-  copy:
+  ansible.builtin.copy:
     content: |
       /var/log/cvmfs/*.log {
           weekly
@@ -91,7 +91,7 @@
     dest: /etc/logrotate.d/cvmfs
 
 - name: Schedule stratum1 snapshots
-  cron:
+  ansible.builtin.cron:
     name: cvmfs_snapshot_all
     cron_file: ansible_cvmfs_stratum1_snapshot
     user: root
@@ -107,7 +107,7 @@
     special_time: "{{ cvmfs_stratum1_snapshot_time.special_time | default(omit) }}"
 
 - name: Schedule GeoIP database updates
-  cron:
+  ansible.builtin.cron:
     name: cvmfs_geoip_db_update
     cron_file: ansible_cvmfs_geoip_db_update
     user: root
@@ -118,12 +118,12 @@
   when: cvmfs_geo_license_key is defined
 
 - name: Include garbage collection tasks
-  include_tasks: gc.yml
+  ansible.builtin.include_tasks: gc.yml
   when: cvmfs_gc_enabled
 
 # allow unprivileged users to restart squid
 - name: Allow users to manage services
-  template:
+  ansible.builtin.template:
     src: 01-manage-units.rules.j2
     dest: /etc/polkit-1/rules.d/01-manage-units.rules
   when: cvmfs_manage_units_group is defined
