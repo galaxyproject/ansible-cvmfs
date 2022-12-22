@@ -90,3 +90,27 @@
 - name: Include garbage collection tasks
   ansible.builtin.include_tasks: gc.yml
   when: cvmfs_gc_enabled
+
+- name: Install cvmfs_prune_snapshots
+  copy:
+    src: cvmfs_prune_snapshots.sh
+    dest: /usr/local/bin/cvmfs_prune_snapshots
+    mode: 0755
+
+- name: Schedule snapshot pruning
+  ansible.builtin.cron:
+    name: cvmfs_prune_snapshots_{{ item.repository }}
+    cron_file: ansible_cvmfs_stratum0_prune_snapshots
+    user: "{{ item.owner | default('root') }}"
+    job: >-
+      output=$(/usr/local/bin/cvmfs_prune_snapshots
+      -c {{ item.prune_snapshots_count | default(cvmfs_stratum0_prune_snapshots_count) }}
+      '{{ item.repository }}' 2>&1) || echo "$output"
+    hour: "{{ item.prune_snapshots_time.hour | default(omit) }}"
+    minute: "{{ item.prune_snapshots_time.minute | default(omit) }}"
+    day: "{{ item.prune_snapshots_time.day | default(omit) }}"
+    month: "{{ item.prune_snapshots_time.month | default(omit) }}"
+    weekday: "{{ item.prune_snapshots_time.weekday | default(omit) }}"
+    special_time: "{{ item.prune_snapshots_time.special_time | default(omit) }}"
+  loop: "{{ cvmfs_repositories }}"
+  when: "{{ item.prune_snapshots_time is defined }}"

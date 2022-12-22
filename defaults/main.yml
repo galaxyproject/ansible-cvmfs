@@ -41,6 +41,9 @@ cvmfs_stratum1_cache_mem: 128 # MB
 cvmfs_stratum1_snapshot_time:
   special_time: hourly
 
+# Number of snapshots to keep. Per the documentation, the recommended count is no more than 50.
+cvmfs_stratum0_prune_snapshots_count: 50
+
 # Whether the client or server should be upgraded or just installed if missing
 cvmfs_upgrade_client: false
 cvmfs_upgrade_server: false
