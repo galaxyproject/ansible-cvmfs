@@ -113,4 +113,4 @@
     weekday: "{{ item.prune_snapshots_time.weekday | default(omit) }}"
     special_time: "{{ item.prune_snapshots_time.special_time | default(omit) }}"
   loop: "{{ cvmfs_repositories }}"
-  when: "{{ item.prune_snapshots_time is defined }}"
+  when: item.prune_snapshots_time is defined
