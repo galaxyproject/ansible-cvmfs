@@ -9,7 +9,7 @@
 
 - name: Create garbage collection log directory
   ansible.builtin.file:
-    path: "{{ cvmfs_gc_log | dirname }}"
+    path: "{{ (cvmfs_gc_log | default('/var/log/cvmfs/gc.log')) | dirname }}"
     state: directory
     owner: "{{ cvmfs_gc_user }}"
     mode: 0755
