@@ -28,7 +28,7 @@
 
 - name: Configure CernVM-FS config repository
   when: cvmfs_config_repo and cvmfs_config_repo_supported
-  ansible.builtin.block:
+  block:
     - name: Create config repo config
       ansible.builtin.copy:
         content: |
