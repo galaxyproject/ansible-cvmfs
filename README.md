@@ -89,6 +89,23 @@ cvmfs_repositories:
       - KEY=val
 ```
 
+For Stratum 0 / Release Managers, you can automatically prune older snapshots using the `prune_snapshots_time`, a hash
+having keys that correspond to the [cron module
+options](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html). If
+`prune_snapshots_time` is unset, then snapshots are not automatically pruned.
+
+```
+cvmfs_repositories:
+  - repository: repo.example.org
+    owner: user1
+    prune_snapshots_count: 20
+    prune_snapshots_time:
+       special_time: daily
+```
+
+The per-repository `prune_snapshots_count` option defaults to the value of `cvmfs_stratum0_prune_snapshots_count` in
+[defaults/main.yml][defaults] if unset.
+
 ## Server variables
 
 variable | type | description
