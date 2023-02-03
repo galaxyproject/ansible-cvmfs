@@ -23,7 +23,7 @@
 - name: Perform AutoFS and FUSE configuration for CernVM-FS
   ansible.builtin.command: cvmfs_config setup
   notify:
-    - reload autofs
+    - Reload autofs
   when: not ansible_check_mode and "CernVM-FS map is not referenced" in cvmfs_config_chksetup_out.stdout
 
 - name: Configure CernVM-FS config repository
