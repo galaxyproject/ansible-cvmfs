@@ -6,7 +6,7 @@
     backup: true
     mode: 0644
   notify:
-    - restart squid
+    - Restart squid
 
 - name: Fix cache directory permission
   ansible.builtin.file:

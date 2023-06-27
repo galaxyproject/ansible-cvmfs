@@ -46,7 +46,7 @@
     creates: /srv/cvmfs/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
   notify:
-    - restart apache
+    - Restart apache
 
 - name: Ensure repositories are imported
   ansible.builtin.command: |
@@ -55,7 +55,7 @@
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   with_items: "{{ cvmfs_repositories }}"
   notify:
-    - restart apache
+    - Restart apache
 
 - name: Include repository server options tasks
   ansible.builtin.include_tasks: options.yml
