@@ -17,7 +17,7 @@
 #       {{ inventory_hostname }} 127.0.0.1
 #     dest: /etc/squid/hosts
 #   notify:
-#     - restart squid
+#     - Restart squid
 
 - name: Include firewall tasks
   ansible.builtin.include_tasks: firewall.yml

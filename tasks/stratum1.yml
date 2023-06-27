@@ -16,7 +16,7 @@
     backup: true
   when: cvmfs_config_apache
   notify:
-    - reload apache
+    - Reload apache
 
 - name: Include stratumN tasks
   ansible.builtin.include_tasks: stratumN.yml
@@ -53,7 +53,7 @@
   loop: "{{ cvmfs_repositories }}"
   register: __cvmfs_add_replica_result
   notify:
-    - restart apache
+    - Restart apache
 
 # Ideally we could use item.stratum0_url_scheme directly in `cvmfs_server add-replica` above, but it appears not to
 # support it, so we instead have to change it after the fact
