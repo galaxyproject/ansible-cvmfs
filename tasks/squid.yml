@@ -6,7 +6,7 @@
     backup: true
     mode: 0644
   notify:
-    - restart squid
+    - Restart squid
 
 - name: Fix cache directory permission
   ansible.builtin.file:
@@ -18,13 +18,27 @@
     setype: squid_cache_t
   when: cvmfs_stratum1_cache_dir is defined
 
-- name: Create the cache directories for the first time
-  become: true
-  become_user: "{{ cvmfs_squid_user }}"
-  ansible.builtin.command: squid -z
-  args:
-    creates: "{{ cvmfs_stratum1_cache_dir }}/00"
+- name: Check whether the cache directories exist
+  ansible.builtin.stat:
+    path: "{{ cvmfs_stratum1_cache_dir.dir }}/00"
+  register: cvmfs_stratum1_cache_dir_stat
   when: cvmfs_stratum1_cache_dir is defined
+
+- name: Create the cache directories for the first time
+  when: cvmfs_stratum1_cache_dir is defined and not cvmfs_stratum1_cache_dir_stat.stat.exists
+  block:
+
+  - name: Ensure squid is stopped
+    ansible.builtin.service:
+      name: "{{ cvmfs_squid_service_name }}"
+      state: stopped
+
+  - name: Create the cache directories
+    become: true
+    become_user: "{{ cvmfs_squid_user }}"
+    ansible.builtin.command: squid -z
+    args:
+      creates: "{{ cvmfs_stratum1_cache_dir.dir }}/00"
 
 - name: Ensure squid is enabled and started
   ansible.builtin.service:
