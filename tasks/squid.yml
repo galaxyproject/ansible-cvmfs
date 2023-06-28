@@ -23,7 +23,7 @@
   become_user: "{{ cvmfs_squid_user }}"
   ansible.builtin.command: squid -z
   args:
-    creates: "{{ cvmfs_stratum1_cache_dir }}/00"
+    creates: "{{ cvmfs_stratum1_cache_dir.dir }}/00"
   when: cvmfs_stratum1_cache_dir is defined
 
 - name: Ensure squid is enabled and started
