@@ -158,7 +158,8 @@ galaxy_cvmfs_config_repo:
     client_options: []
 # Defaults for galaxyproject.org repos
 galaxy_cvmfs_keys:
-  # This will become the key for all repos, currently cvmfs-config and singularity
+  # This will become the key for all repos, currently cvmfs-config,
+  # singularity and refgenomes-databio.
   - path: /etc/cvmfs/keys/galaxyproject.org/galaxyproject.org.pub
     key: |
       -----BEGIN PUBLIC KEY-----
@@ -224,6 +225,17 @@ galaxy_cvmfs_keys:
       KdC5mWONdRmmSDM4OmgJl7wdzE5pUTA+H1GagESxG4Cm/7EN9ZnVgWdb/sgVTxHG
       e3odhIy/hV82RHkaW456/jhd8tD8LHpY8jdM/rWvwrBgI7WntqSijOUe2a6uC7S1
       sQIDAQAB
+      -----END PUBLIC KEY-----
+  - path: /etc/cvmfs/keys/galaxyproject.org/refgenomes-databio.galaxyproject.org.pub
+    key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuJZTWTY3/dBfspFKifv8
+      TWuuT2Zzoo1cAskKpKu5gsUAyDFbZfYBEy91qbLPC3TuUm2zdPNsjCQbbq1Liufk
+      uNPZJ8Ubn5PR6kndwrdD13NVHZpXVml1+ooTSF5CL3x/KUkYiyRz94sAr9trVoSx
+      THW2buV7ADUYivX7ofCvBu5T6YngbPZNIxDB4mh7cEal/UDtxV683A/5RL4wIYvt
+      S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
+      mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
+      dQIDAQAB
       -----END PUBLIC KEY-----
 
 galaxy_cvmfs_server_urls:
