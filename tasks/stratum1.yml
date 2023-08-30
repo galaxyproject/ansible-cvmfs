@@ -43,6 +43,14 @@
     dest: /etc/cvmfs/server.local
   when: cvmfs_geo_license_key is defined
 
+- name: Bypassing GeoIP API key
+  ansible.builtin.copy:
+    content: |
+      CVMFS_GEO_DB_FILE=NONE
+    mode: 0400
+    dest: /etc/cvmfs/server.local
+  when: cvmfs_geo_license_key is not defined
+
 - name: Ensure replicas are configured
   ansible.builtin.command: >-
     /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }}
