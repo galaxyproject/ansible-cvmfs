@@ -47,7 +47,7 @@
   ansible.builtin.command: >-
     /usr/bin/cvmfs_server add-replica -o {{ item.owner | default('root') }}
       http://{{ item.stratum0 }}/cvmfs/{{ item.repository }}
-      {{ item.key_dir | default('/etc/cvmfs/keys') }}/{{ item.repository }}.pub
+      {{ item.key_dir | default('/etc/cvmfs/keys') }}
   args:
     creates: /etc/cvmfs/repositories.d/{{ item.repository }}
   loop: "{{ cvmfs_repositories }}"
