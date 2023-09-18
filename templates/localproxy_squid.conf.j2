@@ -7,9 +7,9 @@ http_access allow all
 
 always_direct allow all
 
-# {% if cvmfs_localproxy_cache_dir is defined %}
-# cache_dir ufs {{ cvmfs_localproxy_cache_dir.dir }} {{ cvmfs_localproxy_cache_dir.size }} 16 256
-# {% endif %}
+{% if cvmfs_localproxy_cache_dir is defined %}
+cache_dir ufs {{ cvmfs_localproxy_cache_dir.dir }} {{ cvmfs_localproxy_cache_dir.size }} 16 256
+{% endif %}
 
 cache_mem {{ cvmfs_localproxy_cache_mem }} MB
 
