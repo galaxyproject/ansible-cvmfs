@@ -38,6 +38,7 @@
 - name: Install GeoIP API key
   ansible.builtin.copy:
     content: |
+      CVMFS_GEO_ACCOUNT_ID="{{ cvmfs_geo_account_id }}"
       CVMFS_GEO_LICENSE_KEY="{{ cvmfs_geo_license_key }}"
     mode: 0400
     dest: /etc/cvmfs/server.local
