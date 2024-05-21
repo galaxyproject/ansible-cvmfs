@@ -18,8 +18,10 @@ cvmfs_stratum1_http_ports:
 cvmfs_localproxy_http_ports:
   - 3128
 
-cvmfs_stratum1_apache_port: 8008
+cvmfs_stratum1_apache_port: "{{ cvmfs_stratum1_squid_enabled | ternary(8008, 80) }}"
 cvmfs_stratum1_cache_mem: 128 # MB
+
+cvmfs_stratum1_squid_enabled: true
 
 # Stratum 1 snapshot cron job timing, hash keys correspond to the cron module options:
 #   https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html
