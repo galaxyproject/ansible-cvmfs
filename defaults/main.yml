@@ -160,7 +160,7 @@ galaxy_cvmfs_config_repo:
     client_options: []
 # Defaults for galaxyproject.org repos
 galaxy_cvmfs_keys:
-  # This will become the key for all repos, currently cvmfs-config and singularity
+  # This will become the key for all repos, currently cvmfs-config, singularity, and test
   - path: /etc/cvmfs/keys/galaxyproject.org/galaxyproject.org.pub
     key: |
       -----BEGIN PUBLIC KEY-----
@@ -171,17 +171,6 @@ galaxy_cvmfs_keys:
       S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
       mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
       dQIDAQAB
-      -----END PUBLIC KEY-----
-  - path: /etc/cvmfs/keys/galaxyproject.org/test.galaxyproject.org.pub
-    key: |
-      -----BEGIN PUBLIC KEY-----
-      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtfc5SSX9ALcrukWYcxkI
-      mkLhlkJa5tCP1oZNWFA7GfE4xQW2vcKE5qmbZqhYVfdiy+FHPnhWPJp577hekD2F
-      vMITbApdZ0265AjRC0+EKKxpMF8zZ0q71vCFxvdK0c3DtT/3LmqKrr2wimtJZjQN
-      UAZcQG2ykzeHzFZ46w74IO0o8Fv/w2XEbYI0QqbNFv+0hcp5SruFqaaLsRZdd6Bn
-      3iSylgVRQ5b+h1LfB/EuEpSmH1sDozZ4tU0fpbrBSknK76aad1o/cvWY1X87ToUV
-      helU0HE2Rw/u9EqJDvPFTbUmad3MtspkqbG5Eo7lI+ktzbcD7UTsQ/7noIXIQ5dD
-      PwIDAQAB
       -----END PUBLIC KEY-----
   - path: /etc/cvmfs/keys/galaxyproject.org/data.galaxyproject.org.pub
     key: |
