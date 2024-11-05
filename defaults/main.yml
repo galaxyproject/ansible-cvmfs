@@ -205,28 +205,6 @@ galaxy_cvmfs_keys:
       torRYcoFZICTZqY9e/KsadHUeZnH3RvfMypH5oS1POzsFszoSxBhZIBkZbG3/f9Y
       OQIDAQAB
       -----END PUBLIC KEY-----
-  - path: /etc/cvmfs/keys/galaxyproject.org/sandbox.galaxyproject.org.pub
-    key: |
-      -----BEGIN PUBLIC KEY-----
-      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1jHnrwsxMUkMZDAj9GMt
-      WNCFFrNVejTTbyklk+52yyXgVgRWo1qN+5lh6W2UL/b2v9pOEzRVPZBQvNNwKo6P
-      e+5p2JBVJ5yv7tpegEnHaRYw6yoHlWLzeSfiu8/yNp2s3jzK52zdLE9rZu7KlXH3
-      EiY2LbU8wa0oah8BlvqWoHlWm78IQbbgK3Q0KmsXpvpjjhYkRWh/TL7KRmwT0b+C
-      WDNbviUi62sBl1SWQ95kcsfqfviU94DKGWRWDYngnYRV5PZVLuUw8Egix6lW2Sj0
-      l5LILRbaIyXiTsFqXfK1dtjAOmZMkX4wuBch13y9FhMCIRvBDWYQuyxugSC101Ur
-      YwIDAQAB
-      -----END PUBLIC KEY-----
-  - path: /etc/cvmfs/keys/galaxyproject.org/usegalaxy.galaxyproject.org.pub
-    key: |
-      -----BEGIN PUBLIC KEY-----
-      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsqb8HIG5T/juOmVpByIE
-      UfboKj7S2LbnWCZdCAoA9EfQfsxi/p3iWu1j9/0iJjf4yKs+pI6mJL/t+txB9fM5
-      EYdYJv/awH7W4A47e8/CR25HzoM9PjxbssRbHSGWLrDBPHUcyQh7gZGqJYdXIyeS
-      DrgPoftn04xuLQvmPWbi8Ng14c+Kn8947PxZ5hVOmApEd4gzkHI0qFfC7dTN/rTh
-      KdC5mWONdRmmSDM4OmgJl7wdzE5pUTA+H1GagESxG4Cm/7EN9ZnVgWdb/sgVTxHG
-      e3odhIy/hV82RHkaW456/jhd8tD8LHpY8jdM/rWvwrBgI7WntqSijOUe2a6uC7S1
-      sQIDAQAB
-      -----END PUBLIC KEY-----
 
 galaxy_cvmfs_server_urls:
   - domain: galaxyproject.org
