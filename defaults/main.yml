@@ -124,6 +124,19 @@ cvmfs_geoip_db_update_day: "{{ 28 | random(seed=inventory_hostname) }}"
 #   3. this points to a cert bundle that contains CA certs for your Stratum 0 (the default here is valid for EL).
 # cvmfs_x509_cert_bundle: /etc/pki/tls/cert.pem
 
+# The role will deploy a PolicyKit rule that allows unprivileged users to manage the services in cvmfs_manage_units if
+# either of the following two options are set.
+
+# Either a list of usernames, or set to a boolean true to automatically use the 'owner's in cvmfs_repositories
+#cvmfs_manage_units_users: ...
+
+# A group name
+#cvmfs_manage_units_group: ...
+
+# The list of units that can be managed by users in the above group
+cvmfs_manage_units:
+  - squid.service
+
 #
 # Galaxy-specific stuff follows
 #

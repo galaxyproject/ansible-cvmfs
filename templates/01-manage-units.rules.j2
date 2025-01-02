@@ -2,14 +2,23 @@
  * This file is managed by Ansible.  ALL CHANGES WILL BE OVERWRITTEN.
  */
 
-/* Allow users in the docker group to manage units. Way more control than we
- * would like to give, but the "unit" and "verb" action variables (used with
- * action.lookup()) were not added to systemd until 226, so unless RedHat
- * backports them, we are SOL.
- */
+// Allow CVMFS repo owners to manage related services
 polkit.addRule(function(action, subject) {
+    var allowedUnits = {{ cvmfs_manage_units | to_json }};
+{% if cvmfs_manage_units_users is defined and cvmfs_manage_units_users is true %}
+    var allowedUsers = {{ cvmfs_repositories | map(attribute='owner') | unique | to_json }};
+{% elif cvmfs_manage_units_users is defined %}
+    var allowedUsers = {{ cvmfs_manage_units_users | to_json }};
+{% endif %}
     if (action.id == "org.freedesktop.systemd1.manage-units" &&
+        allowedUnits.includes(action.lookup("unit")) &&
+{% if cvmfs_manage_units_users is defined and cvmfs_manage_units_group is defined %}
+        (allowedUsers.includes(subject.user) || subject.isInGroup("{{ cvmfs_manage_units_group }}"))) {
+{% elif cvmfs_manage_units_users is defined %}
+        allowedUsers.includes(subject.user)) {
+{% elif cvmfs_manage_units_group is defined %}
         subject.isInGroup("{{ cvmfs_manage_units_group }}")) {
+{% endif %}
         return polkit.Result.YES;
     }
 });
