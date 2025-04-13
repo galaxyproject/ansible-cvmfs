@@ -1,6 +1,6 @@
 ---
 cvmfs_apache_service_name: apache2
-cvmfs_apache_conf_file: /etc/apache2/apache2.conf
+cvmfs_apache_conf_file: /etc/apache2/ports.conf
 
 cvmfs_squid_service_name: squid
 cvmfs_squid_conf_file: /etc/squid/squid.conf
