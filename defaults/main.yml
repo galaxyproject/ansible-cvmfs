@@ -1,6 +1,8 @@
 ---
 # defaults file for galaxyproject.cvmfs
 
+cvmfs_apt_repository_url: https://cvmrepo.s3.cern.ch/cvmrepo/apt/
+
 cvmfs_keys: []
 cvmfs_private_keys: []
 cvmfs_server_urls: []
