@@ -12,7 +12,7 @@
 - name: Configure CernVM apt repository
   ansible.builtin.apt_repository:
     filename: cernvm.list
-    mode: 422
+    mode: '0644'
     repo: "{{ cvmfs_apt_repository }}"
 
 - name: Install CernVM-FS packages and dependencies (apt)
