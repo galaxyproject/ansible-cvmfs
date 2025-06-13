@@ -1,7 +1,7 @@
 ---
 # defaults file for galaxyproject.cvmfs
 
-cvmfs_apt_repository_url: https://cvmrepo.s3.cern.ch/cvmrepo/apt/
+cvmfs_apt_repository: "deb [allow-insecure=true] https://cvmrepo.s3.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main"
 
 cvmfs_keys: []
 cvmfs_private_keys: []
