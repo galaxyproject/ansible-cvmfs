@@ -15,8 +15,8 @@
     }{% if not loop.last %},{% endif %}
     {% endfor %}
   ],
-  {% for key in global_keys %}
   "keys": [
+    {% for key in global_keys %}
     {
       "type": "{{ key.type }}",
       {% if key.type == 'file' %}
@@ -26,6 +26,6 @@
       "secret": "{{ key.secret }}"
       {% endif %}
     }{% if not loop.last %},{% endif %}
-  {% endfor %}
+    {% endfor %}
   ]
 }
