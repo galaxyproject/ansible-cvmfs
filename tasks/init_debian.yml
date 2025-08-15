@@ -19,21 +19,21 @@
     mode: '0644'
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('jammy', 'noble')
 
-- name: Configure CernVM apt repository
+- name: Configure CernVM apt repository for non-Ubuntu distributions
   ansible.builtin.apt_repository:
     filename: cernvm
     mode: 422
     repo: deb [signed-by=/usr/share/keyrings/cernvm.gpg] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main
   when: ansible_distribution != 'Ubuntu'
 
-- name: Configure CernVM apt repository
+- name: Configure CernVM apt repository for older Ubuntu releases
   ansible.builtin.apt_repository:
     filename: cernvm.list
     mode: 422
     repo: deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('bionic', 'xenial', 'precise', 'focal')
 
-- name: Configure CernVM apt repository
+- name: Configure CernVM apt repository for modern Ubuntu releases
   ansible.builtin.apt_repository:
     filename: cernvm
     mode: 422
@@ -42,7 +42,7 @@
 
 # There are no packages for any of the non LTS versions so good
 # luck and have fun if that's you.
-- name: Configure CernVM apt repository
+- name: Configure CernVM apt repository for non-LTS Ubuntu releases
   ansible.builtin.apt_repository:
     filename: cernvm
     mode: 422
