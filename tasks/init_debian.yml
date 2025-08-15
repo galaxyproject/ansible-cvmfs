@@ -10,12 +10,14 @@
     url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
     state: absent
   ignore_errors: true
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('jammy', 'noble')
 
 - name: Download CernVM GPG key
   ansible.builtin.get_url:
     url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
     dest: /usr/share/keyrings/cernvm.gpg
     mode: '0644'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('jammy', 'noble')
 
 - name: Configure CernVM apt repository
   ansible.builtin.apt_repository:
