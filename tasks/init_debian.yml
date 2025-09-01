@@ -5,32 +5,53 @@
       - apt-transport-https
       - ca-certificates
 
-- name: Install CernVM apt key
+- name: Remove old CernVM GPG key from legacy keyring
   ansible.builtin.apt_key:
     url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
+    state: absent
+  ignore_errors: true
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('jammy', 'noble')
 
-- name: Configure CernVM apt repository
+- name: Download CernVM GPG key
+  ansible.builtin.get_url:
+    url: https://cvmrepo.web.cern.ch/cvmrepo/apt/cernvm.gpg
+    dest: /usr/share/keyrings/cernvm.gpg
+    mode: '0644'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('jammy', 'noble')
+
+- name: Configure CernVM apt repository for non-Ubuntu distributions
   ansible.builtin.apt_repository:
-    filename: cernvm.list
+    filename: cernvm
     mode: 422
-    repo: deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main
+    repo: deb [signed-by=/usr/share/keyrings/cernvm.gpg] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main
   when: ansible_distribution != 'Ubuntu'
 
-- name: Configure CernVM apt repository
+- name: Configure CernVM apt repository for older Ubuntu releases
   ansible.builtin.apt_repository:
     filename: cernvm.list
     mode: 422
     repo: deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('bionic', 'xenial', 'precise', 'focal', 'jammy', 'noble')
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('bionic', 'xenial', 'precise', 'focal')
+
+- name: Configure CernVM apt repository for modern Ubuntu releases
+  ansible.builtin.apt_repository:
+    filename: cernvm
+    mode: 422
+    repo: deb [signed-by=/usr/share/keyrings/cernvm.gpg] https://cvmrepo.web.cern.ch/cvmrepo/apt/ {{ ansible_distribution_release }}-prod main
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release in ('jammy', 'noble')
 
 # There are no packages for any of the non LTS versions so good
 # luck and have fun if that's you.
-- name: Configure CernVM apt repository
+- name: Configure CernVM apt repository for non-LTS Ubuntu releases
   ansible.builtin.apt_repository:
-    filename: cernvm.list
+    filename: cernvm
     mode: 422
-    repo: deb [allow-insecure=true] https://cvmrepo.web.cern.ch/cvmrepo/apt/ xenial-prod main
+    repo: deb [signed-by=/usr/share/keyrings/cernvm.gpg] https://cvmrepo.web.cern.ch/cvmrepo/apt/ xenial-prod main
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_release not in ('bionic', 'xenial', 'precise', 'focal', 'jammy', 'noble')
+
+- name: Update apt cache after key changes
+  ansible.builtin.apt:
+    update_cache: yes
 
 - name: Install CernVM-FS packages and dependencies (apt)
   ansible.builtin.apt:
