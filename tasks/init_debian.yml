@@ -5,9 +5,19 @@
       - apt-transport-https
       - ca-certificates
 
+- name: Make sure /etc/apt/keyrings is present
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
 - name: Install CernVM apt key
-  ansible.builtin.apt_key:
-    url: https://cvmrepo.s3.cern.ch/cvmrepo/apt/cernvm.gpg
+  ansible.builtin.get_url:
+    url: "{{ cvmfs_apt_repository_key }}"
+    dest: /etc/apt/keyrings/cernvm.gpg
+    mode: '0644'
 
 - name: Configure CernVM apt repository
   ansible.builtin.apt_repository:
