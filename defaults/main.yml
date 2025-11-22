@@ -106,10 +106,10 @@ cvmfs_config_repo: {}
 # CVMFS_CONFIG_REPOSITORY is not supported on Debian < 9, Ubuntu LTS < 18.04
 cvmfs_config_repo_supported: >-
   {{
-    'true' if ansible_os_family != 'Debian' else (
-    'true' if (ansible_distribution == 'Debian' and ansible_distribution_version is version('9', '>=')) else (
-    'true' if (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '>=')) else
-    'false'))
+    true if ansible_os_family != 'Debian' else (
+    true if (ansible_distribution == 'Debian' and ansible_distribution_version is version('9', '>=')) else (
+    true if (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '>=')) else
+    false))
   }}
 
 # When to update the GeoIP database, if cvmfs_geo_license_key is defined
