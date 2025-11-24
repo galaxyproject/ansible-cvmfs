@@ -139,7 +139,19 @@ None.
 Example Playbook
 ----------------
 
-Configure all hosts as CVMFS clients with configurations for the Galaxy CVMFS repositories:
+## Configure a client
+
+There is a sample playbook in `client_playbook.yml` that can be used to
+configure a CVMFS client for Galaxy's CVMFS repositories. Note that this role
+does not currently work on Ubuntu 24.04. To use, update the inventory file in
+`inventory/clients.ini` to include the hosts you want to configure and run the
+playbook with:
+
+```sh
+ansible-playbook -i inventory/clients.ini client_playbook.yml
+```
+
+Alternatively, create your own playbook file and reference the role:
 
 ```yaml
 - name: CVMFS
@@ -151,6 +163,8 @@ Configure all hosts as CVMFS clients with configurations for the Galaxy CVMFS re
     - geerlingguy.repo-epel
     - galaxyproject.cvmfs
 ```
+
+## Configure a Stratum 1 (mirror) server
 
 Create a Stratum 1 (mirror) of the Galaxy CVMFS repositories and configure clients to prefer your Stratum 1 (assuming
 you have configured hosts in groups `cvmfsclients` and `cvmfsstratum1servers`):
@@ -174,6 +188,8 @@ you have configured hosts in groups `cvmfsclients` and `cvmfsstratum1servers`):
   roles:
     - galaxyproject.cvmfs
 ```
+
+## Configure a Stratum 0 (release manager) server
 
 Create your own CVMFS infrastructure. Run once without keys (new keys will be generated on repo creation):
 
