@@ -27,7 +27,7 @@
   when: not ansible_check_mode and "CernVM-FS map is not referenced" in cvmfs_config_chksetup_out.stdout
 
 - name: Configure CernVM-FS config repository
-  when: cvmfs_config_repo and cvmfs_config_repo_supported
+  when: (cvmfs_config_repo | bool) and cvmfs_config_repo_supported
   block:
     - name: Create config repo config
       ansible.builtin.copy:
