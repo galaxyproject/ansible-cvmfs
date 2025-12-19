@@ -50,6 +50,11 @@ cvmfs_stratum0_prune_snapshots_count: 50
 cvmfs_upgrade_client: false
 cvmfs_upgrade_server: false
 
+# There are no packages for any of the non-LTS Ubuntu versions or Debian sid, so if you want to use this role on one of
+# those distributions, you will need to set cvmfs_apt_distribution to one of the supported distributions and hope for
+# the best
+#cvmfs_apt_distribution: noble
+
 # Install a setuid binary allowing unprivileged users to call `cvmfs_config wipecache` or `cvmfs_talk remount sync`?
 cvmfs_install_setuid_cvmfs_wipecache: false
 cvmfs_install_setuid_cvmfs_remount_sync: false
