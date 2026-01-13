@@ -41,12 +41,8 @@
         mode: 0444
 
     - name: Set config repo defaults
-      ansible.builtin.copy:
-        content: |
-          ## This file is maintained by Ansible - CHANGES WILL BE OVERWRITTEN
-          CVMFS_CONFIG_REPOSITORY="{{ cvmfs_config_repo.repository.repository }}"
-          CVMFS_DEFAULT_DOMAIN="{{ cvmfs_config_repo.domain }}"
-          CVMFS_USE_GEOAPI="{{ cvmfs_config_repo.use_geoapi | default(false) | ternary('yes', 'no') }}"
+      ansible.builtin.template:
+        src: default.local.j2
         dest: /etc/cvmfs/default.d/80-ansible-galaxyproject-cvmfs.conf
         owner: root
         group: root
