@@ -7,8 +7,8 @@ CVMFS_HTTP_PROXY="{{ cvmfs_http_proxies | join(';') }}"
 CVMFS_QUOTA_LIMIT="{{ cvmfs_quota_limit }}"
 CVMFS_CACHE_BASE="{{ cvmfs_cache_base }}"
 
-{% if cvmfs_telemetry_send == 'ON' %}
-CVMFS_TELEMETRY_SEND="{{ cvmfs_telemetry_send }}"
+{% if cvmfs_telemetry %}
+CVMFS_TELEMETRY_SEND="ON"
 CVMFS_TELEMETRY_RATE="{{ cvmfs_telemetry_rate }}"
 CVMFS_INFLUX_HOST="{{ cvmfs_influx_host }}"
 CVMFS_INFLUX_PORT="{{ cvmfs_influx_port }}"
