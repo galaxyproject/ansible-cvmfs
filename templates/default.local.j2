@@ -1,0 +1,18 @@
+##
+## This file is managed by Ansible.  ALL CHANGES WILL BE OVERWRITTEN.
+##
+
+CVMFS_REPOSITORIES="{%- for repo in cvmfs_repositories -%}{{ ',' if loop.index0 > 0 else '' }}{{ repo.repository }}{%- endfor -%}"
+CVMFS_HTTP_PROXY="{{ cvmfs_http_proxies | join(';') }}"
+CVMFS_QUOTA_LIMIT="{{ cvmfs_quota_limit }}"
+CVMFS_CACHE_BASE="{{ cvmfs_cache_base }}"
+
+{% if cvmfs_telemetry %}
+CVMFS_TELEMETRY_SEND="ON"
+CVMFS_TELEMETRY_RATE="{{ cvmfs_telemetry_rate }}"
+CVMFS_INFLUX_HOST="{{ cvmfs_influx_host }}"
+CVMFS_INFLUX_PORT="{{ cvmfs_influx_port }}"
+CVMFS_INFLUX_METRIC_NAME="{{ cvmfs_influx_metric_name }}"
+CVMFS_INFLUX_EXTRA_TAGS="{{ cvmfs_influx_extra_tags }}"
+CVMFS_INFLUX_EXTRA_FIELDS="{{ cvmfs_influx_extra_fields }}"
+{% endif %}

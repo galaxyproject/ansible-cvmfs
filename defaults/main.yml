@@ -7,6 +7,8 @@ cvmfs_server_urls: []
 cvmfs_repositories: []
 cvmfs_http_proxies:
   - DIRECT
+cvmfs_quota_limit: 4000
+cvmfs_cache_base: "/var/lib/cvmfs"
 
 cvmfs_manage_firewall: false
 
@@ -265,3 +267,13 @@ galaxy_cvmfs_repositories:
     key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options: []
     client_options: []
+
+# Only enables telemetry if cvmfs_telemetry is true
+# Docs: https://cvmfs.readthedocs.io/en/stable/cpt-telemetry.html#client-telemetry-aggregators
+cvmfs_telemetry: false
+cvmfs_telemetry_rate: "60"
+cvmfs_influx_host: localhost
+cvmfs_influx_port: "8092"
+cvmfs_influx_metric_name: cvmfs_metrics
+cvmfs_influx_extra_tags: ""
+cvmfs_influx_extra_fields: ""
