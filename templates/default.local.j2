@@ -16,3 +16,7 @@ CVMFS_INFLUX_METRIC_NAME="{{ cvmfs_influx_metric_name }}"
 CVMFS_INFLUX_EXTRA_TAGS="{{ cvmfs_influx_extra_tags }}"
 CVMFS_INFLUX_EXTRA_FIELDS="{{ cvmfs_influx_extra_fields }}"
 {% endif %}
+
+{% for key, value in cvmfs_params.items() %}
+{{ key }}="{{ value }}"
+{% endfor %}

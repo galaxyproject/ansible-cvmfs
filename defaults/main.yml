@@ -277,3 +277,11 @@ cvmfs_influx_port: "8092"
 cvmfs_influx_metric_name: cvmfs_metrics
 cvmfs_influx_extra_tags: ""
 cvmfs_influx_extra_fields: ""
+
+# Configure additional CVMFS parameters written to `/etc/cvmfs/default.local`,
+# allowed parameters are documented at
+# https://cvmfs.readthedocs.io/en/stable/apx-parameters.html
+cvmfs_params: {}
+  # CVMFS_FOLLOW_REDIRECTS: true
+  # CVMFS_TIMEOUT: 10
+  # ...
