@@ -38,11 +38,19 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-        - all
+        - 8
+        - 9
+        - 10
     - name: Ubuntu
       versions:
-        - all
-
+        - focal
+        - jammy
+        - noble
+    - name: Debian
+      versions:
+        - bullseye
+        - bookworm
+        - trixie
   galaxy_tags:
     - system
     - filesystem
