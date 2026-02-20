@@ -48,3 +48,4 @@
   ansible.builtin.apt:
     name: "{{ cvmfs_packages[_cvmfs_role] }}"
     state: "{{ 'latest' if _cvmfs_upgrade else 'present' }}"
+    allow_unauthenticated: true
