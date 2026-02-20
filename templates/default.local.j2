@@ -4,6 +4,8 @@
 
 CVMFS_REPOSITORIES="{%- for repo in cvmfs_repositories -%}{{ ',' if loop.index0 > 0 else '' }}{{ repo.repository }}{%- endfor -%}"
 CVMFS_HTTP_PROXY="{{ cvmfs_http_proxies | join(';') }}"
+{% if cvmfs_quota_limit %}CVMFS_QUOTA_LIMIT="{{ cvmfs_quota_limit }}"{% endif %}
+{% if cvmfs_cache_base %}CVMFS_CACHE_BASE="{{ cvmfs_cache_base }}"{% endif %}
 
 {% if cvmfs_telemetry %}
 CVMFS_TELEMETRY_SEND="ON"
