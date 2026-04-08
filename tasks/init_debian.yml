@@ -16,7 +16,7 @@
 - name: Install CernVM apt key
   ansible.builtin.get_url:
     url: "{{ cvmfs_apt_repository_key }}"
-    dest: /etc/apt/keyrings/cernvm.gpg
+    dest: /etc/apt/trusted.gpg.d/cernvm.gpg
     mode: '0644'
 
 - name: Configure CernVM apt repository
