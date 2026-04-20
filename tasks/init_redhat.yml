@@ -25,7 +25,23 @@
     - name: cernvm-config
       description: CernVM-FS extra config packages
       baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/
-  when: item.name != 'cernvm-config' or ansible_distribution_major_version | int < 10
+  when: ansible_distribution_major_version | int < 10
+
+- name: Configure CernVM yum repositories RHEL10+
+  ansible.builtin.yum_repository:
+    file: cernvm
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    baseurl: "{{ item.baseurl }}"
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
+    gpgcheck: true
+    enabled: true
+    protect: true
+  loop:
+    - name: cernvm
+      description: CernVM packages
+      baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/
+  when: ansible_distribution_major_version | int >= 10
 
 - name: Download CernVM GPG key
   ansible.builtin.get_url:
