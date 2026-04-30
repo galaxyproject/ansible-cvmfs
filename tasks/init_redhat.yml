@@ -60,3 +60,4 @@
   ansible.builtin.yum:
     name: "{{ cvmfs_packages[_cvmfs_role] }}"
     state: "{{ 'latest' if _cvmfs_upgrade else 'present' }}"
+    disable_gpg_check: no
