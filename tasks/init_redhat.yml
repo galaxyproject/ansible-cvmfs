@@ -45,7 +45,7 @@
 
 - name: Download CernVM GPG key
   ansible.builtin.get_url:
-    url: https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048
+    url: https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM
     dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
     owner: root
     group: root
