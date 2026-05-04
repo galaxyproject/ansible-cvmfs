@@ -8,60 +8,67 @@
     - cernvm
     - cernvm-config
 
-- name: Configure CernVM yum repositories
-  ansible.builtin.yum_repository:
-    file: cernvm
-    name: "{{ item.name }}"
-    description: "{{ item.description }}"
-    baseurl: "{{ item.baseurl }}"
-    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
-    gpgcheck: true
-    enabled: true
-    protect: true
-  loop:
-    - name: cernvm
-      description: CernVM packages
-      baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/
-    - name: cernvm-config
-      description: CernVM-FS extra config packages
-      baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/
+- name: Configure CernVM yum repositories RHEL8/9
   when: ansible_distribution_major_version | int < 10
+  block:
+    - name: Configure CernVM yum repositories
+      ansible.builtin.yum_repository:
+        file: cernvm
+        name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        baseurl: "{{ item.baseurl }}"
+        gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
+        gpgcheck: true
+        enabled: true
+        protect: true
+      loop:
+        - name: cernvm
+          description: CernVM packages
+          baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/
+        - name: cernvm-config
+          description: CernVM-FS extra config packages
+          baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/
+
+    - name: Download CernVM GPG key
+      ansible.builtin.get_url:
+        url: https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM
+        dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
+        owner: root
+        group: root
+        mode: "0644"
+        force: true
 
 - name: Configure CernVM yum repositories RHEL10+
-  ansible.builtin.yum_repository:
-    file: cernvm
-    name: "{{ item.name }}"
-    description: "{{ item.description }}"
-    baseurl: "{{ item.baseurl }}"
-    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
-    gpgcheck: true
-    enabled: true
-    protect: true
-  loop:
-    - name: cernvm
-      description: CernVM packages
-      baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/
   when: ansible_distribution_major_version | int >= 10
+  block:
+    - name: Configure CernVM yum repositories RHEL10+
+      ansible.builtin.yum_repository:
+        file: cernvm
+        name: "{{ item.name }}"
+        description: "{{ item.description }}"
+        baseurl: "{{ item.baseurl }}"
+        gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
+        gpgcheck: true
+        enabled: true
+        protect: true
+      loop:
+        - name: cernvm
+          description: CernVM packages
+          baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$releasever/$basearch/
 
-- name: Download CernVM GPG key
-  ansible.builtin.get_url:
-    url: https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM
-    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
-    owner: root
-    group: root
-    mode: "0644"
+    - name: Download CernVM GPG key (2048-bit for RHEL10+)
+      ansible.builtin.get_url:
+        url: https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048
+        dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
+        owner: root
+        group: root
+        mode: "0644"
+        force: true
 
 - name: Import CernVM GPG key into RPM
   ansible.builtin.rpm_key:
     state: present
     key: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
-  when: ansible_distribution_major_version | int < 10
-
-- name: Import CernVM GPG key into RPM
-  ansible.builtin.rpm_key:
-    state: present
-    key: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM-2028
-  when: ansible_distribution_major_version | int >= 10
 
 - name: Install CernVM-FS packages and dependencies (yum)
   ansible.builtin.yum:
