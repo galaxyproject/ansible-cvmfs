@@ -55,9 +55,15 @@
   ansible.builtin.rpm_key:
     state: present
     key: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
+  when: ansible_distribution_major_version | int < 10
+
+- name: Import CernVM GPG key into RPM
+  ansible.builtin.rpm_key:
+    state: present
+    key: /etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM-2028
+  when: ansible_distribution_major_version | int >= 10
 
 - name: Install CernVM-FS packages and dependencies (yum)
   ansible.builtin.yum:
     name: "{{ cvmfs_packages[_cvmfs_role] }}"
     state: "{{ 'latest' if _cvmfs_upgrade else 'present' }}"
-    disable_gpg_check: no
