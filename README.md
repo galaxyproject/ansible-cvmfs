@@ -25,21 +25,8 @@ All variables are optional. However, if unset, the role will essentially do noth
 ## Galaxy Client
 
 Other than `cvmfs_role` as described below, [Galaxy][galaxy] administrators will most likely only need to set the
-`galaxy_cvmfs_repos_enabled` variable (disabled by default), which automatically configures the CVMFS client for
-[galaxyproject.org][galaxy] CVMFS repositories.
-
-The value of `galaxy_cvmfs_repos_enabled` can be either `config-repo` or any value that evaluates to `true` (or `false`
-to explcititly disable, although this is the default). Using `config-repo` is recommended since it causes the role to
-only install a minimal configuration needed to mount the `cvmfs-config.galaxyproject.org` CVMFS repository, and then
-uses CVMFS' [Config Repository][cvmfs-config-repo] support to obtain the configs for the other galaxyproject.org CVMFS
-repositories. This ensures you will always have up-to-date configs for all galaxyproject.org CVMFS repositories.
-
-Setting `galaxy_cvmfs_repos_enabled` to `config-repo` overrides the value of `cvmfs_config_repo` since there can be only
-one default config repo configured on the client.
-
-Setting `galaxy_cvmfs_repos_enabled` to any other truthy value will causes the role to create a static configuration
-where the full configurations for each galaxyproject.org CVMFS repository is installed on the target host. This option
-is retained for legacy purposes.
+`galaxy_cvmfs_repos_enabled` variable to `true` (`false` by default), which automatically configures the CVMFS client
+for [galaxyproject.org][galaxy] CVMFS repositories.
 
 You can override the defaults for Galaxy's `cvmfs_keys`, `cvmfs_server_urls`, and `cvmfs_repositories` by prepending
 `galaxy_` to the variable names. See the [defaults][defaults] for details.
@@ -55,7 +42,7 @@ variable | type | description
 `cvmfs_keys` | list of dicts | Keys to install on hosts of all types.
 `cvmfs_server_urls` | list of dicts | CVMFS server URLs, the value of `CVMFS_SERVER_URL` in `/etc/cvmfs/domain.d/<domain>.conf`.
 `cvmfs_repositories` | list of dicts | CVMFS repository configurations, the value of `CVMFS_REPOSITORIES` in `/etc/cvmfs/default.local` plus additional settings in `/etc/cvmfs/repositories.d/<repository>/{client,server}.conf`.
-`cvmfs_config_repo` | dict | CVMFS [Configuration Repository][cvmfs-config-repo] configuration, see the value of `galaxy_cvmfs_config_repo` in the [defaults][defaults] for syntax.
+`cvmfs_config_repo` | dict | CVMFS [Configuration Repository][cvmfs-config-repo] configuration.
 `cvmfs_quota_limit` | integer in MB | Size of CVMFS client cache. Default is `4000`.
 `cvmfs_upgrade_client` | boolean | Upgrade CVMFS on clients to the latest version if it is already installed. Default is `false`.
 `cvmfs_preload_install` | boolean | Install the `cvmfs_preload` script for [preloading the CVMFS cache][preload].
@@ -146,7 +133,7 @@ Configure all hosts as CVMFS clients with configurations for the Galaxy CVMFS re
   hosts: all
   vars:
     cvmfs_role: client
-    galaxy_cvmfs_repos_enabled: config-repo
+    galaxy_cvmfs_repos_enabled: true
   roles:
     - geerlingguy.repo-epel
     - galaxyproject.cvmfs
