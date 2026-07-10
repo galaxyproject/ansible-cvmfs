@@ -44,6 +44,12 @@
     update_cache: yes
   when: __cvmfs_apt_respository_result is changed
 
+- name: Install optional cvmfs-config package
+  ansible.builtin.apt:
+    name: "{{ ('://' in cvmfs_config_package) | ternary(omit, cvmfs_config_package) }}"
+    deb: "{{ ('://' in cvmfs_config_package) | ternary(cvmfs_config_package, omit) }}"
+  when: cvmfs_config_package is not none
+
 - name: Install CernVM-FS packages and dependencies (apt)
   ansible.builtin.apt:
     name: "{{ cvmfs_packages[_cvmfs_role] }}"

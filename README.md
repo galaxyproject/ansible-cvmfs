@@ -126,6 +126,12 @@ variable | type | description
 `cvmfs_srv_mount` | path | Path to mount CVMFS data volume on. Default is `/srv` (but is ignored if `cvmfs_srv_device` is unset).
 `cvmfs_union_fs` | string | Union filesystem type (`overlayfs` or `aufs`) for new repositories on Stratum 0 servers.
 `cvmfs_numfiles` | integer | Set the maximum number of open files in `/etc/security/limits.conf`. Useful with the `CVMFS_NFILES` client option on Stratum 0 servers.
+`cvmfs_config_packaage` | string | Optional package providing `config-config`, see below.
+
+The `cvmfs_config_package` can be set to a URL or package name to install (via `apt` or `dnf`) to preconfigure CVMFS as
+discussed in [the documentation][cvmfs-config-repo]. Alternatively, these can be set to the URL of the appropriate
+[`cvmfs-config-none`](https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/) package to prevent any preconfiguration. If unset,
+the CVMFS client package installs `cvmfs-config-default`, which provides a default config for the cern.ch domain.
 
 [defaults]: https://github.com/galaxyproject/ansible-cvmfs/blob/master/defaults/main.yml
 [cvmfs-config-repo]: https://cvmfs.readthedocs.io/en/stable/cpt-configure.html#the-config-repository
