@@ -58,6 +58,14 @@
         path: /etc/cvmfs/domain.d/{{ cvmfs_config_repo.domain }}.conf
         state: absent
 
+- name: Ensure domain directory exists
+  ansible.builtin.file:
+    path: /etc/cvmfs/domain.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
 - name: Configure CernVM-FS domain
   ansible.builtin.copy:
     content: |
@@ -68,7 +76,7 @@
     dest: /etc/cvmfs/domain.d/{{ item.domain }}.conf
     owner: root
     group: root
-    mode: 0444
+    mode: "0644"
   with_items: "{{ cvmfs_server_urls }}"
 
 - name: Configure CernVM-FS global client settings
@@ -77,7 +85,7 @@
     dest: /etc/cvmfs/default.local
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
 
 - name: Include repository client options tasks
   ansible.builtin.include_tasks: options.yml
