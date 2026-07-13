@@ -35,18 +35,6 @@
     enabled: true
     protect: true
 
-- name: Configure CernVM config repo
-  ansible.builtin.yum_repository:
-    file: cernvm
-    name: cernvm-config
-    description: CernVM-FS extra config packages
-    baseurl: http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs-config/EL/$releasever/$basearch/
-    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CernVM
-    gpgcheck: true
-    enabled: true
-    protect: true
-  when: ansible_distribution_major_version | int < 10
-
 - name: Install CernVM-FS packages and dependencies (yum)
   ansible.builtin.yum:
     name: "{{ cvmfs_packages[_cvmfs_role] }}"
