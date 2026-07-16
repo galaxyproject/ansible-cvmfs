@@ -3,10 +3,15 @@
 - name: Ensure distribution is LTS or cvmfs_apt_distribution is set
   assert:
     that: >-
-      (ansible_distribution == 'Ubuntu' and 'LTS' in (ansible_lsb.distribution | default(''))) or
+      (ansible_distribution == 'Ubuntu' and
+       ansible_distribution_version.split('.')[1] == '04' and
+       (ansible_distribution_version.split('.')[0] | int) is divisibleby 2) or
       (ansible_distribution == 'Debian' and ansible_distribution_version != 'n/a') or
       (cvmfs_apt_distribution is defined)
-    fail_msg: "Unsupported distribution: {{ ansible_distribution }} {{ ansible_distribution_release }}, please set cvmfs_apt_distribution"
+    fail_msg: >-
+      Unsupported distribution: {{ ansible_distribution }} {{ ansible_distribution_release }}.
+      CernVM-FS apt packages are only published for Ubuntu LTS releases (even year, e.g. 20.04, 22.04, 24.04, 26.04)
+      and Debian. Set cvmfs_apt_distribution to a supported release codename (e.g. noble) to override.
     success_msg: "Distribution OK"
 
 - name: Install apt dependencies
