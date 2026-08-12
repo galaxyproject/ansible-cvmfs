@@ -46,6 +46,7 @@ galaxy_info:
         - focal
         - jammy
         - noble
+        - resolute
     - name: Debian
       versions:
         - bullseye
