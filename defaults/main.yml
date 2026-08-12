@@ -10,6 +10,10 @@ cvmfs_http_proxies:
 cvmfs_quota_limit: 4000
 cvmfs_cache_base: "/var/lib/cvmfs"
 
+# If set, installs a package that satisfies cvmfs-config prior to installing CVMFS itself, for distributing config via
+# package
+cvmfs_config_package: null
+
 cvmfs_manage_firewall: false
 
 cvmfs_stratum0_http_ports:

@@ -35,7 +35,13 @@
     enabled: true
     protect: true
 
-- name: Install CernVM-FS packages and dependencies (yum)
-  ansible.builtin.yum:
+- name: Install optional cvmfs-config package
+  ansible.builtin.dnf:
+    name: "{{ cvmfs_config_package }}"
+    disable_gpg_check: "{{ cvmfs_config_package_disable_gpg_check | default(omit) }}"
+  when: cvmfs_config_package is not none
+
+- name: Install CernVM-FS packages and dependencies (dnf)
+  ansible.builtin.dnf:
     name: "{{ cvmfs_packages[_cvmfs_role] }}"
     state: "{{ 'latest' if _cvmfs_upgrade else 'present' }}"

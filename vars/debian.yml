@@ -11,11 +11,11 @@ cvmfs_packages:
   stratum0:
     - apache2
     - cvmfs-server
-    - cvmfs-config-default
   stratum1:
     - apache2
+    - libapache2-mod-wsgi-py3
     - cvmfs-server
-    - cvmfs-config-default
+    - squid
   localproxy:
     - squid
   client:
