@@ -196,6 +196,17 @@ galaxy_cvmfs_keys:
       mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
       dQIDAQAB
       -----END PUBLIC KEY-----
+  - path: /etc/cvmfs/keys/galaxyproject.org/idc.galaxyproject.org.pub
+    key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuJZTWTY3/dBfspFKifv8
+      TWuuT2Zzoo1cAskKpKu5gsUAyDFbZfYBEy91qbLPC3TuUm2zdPNsjCQbbq1Liufk
+      uNPZJ8Ubn5PR6kndwrdD13NVHZpXVml1+ooTSF5CL3x/KUkYiyRz94sAr9trVoSx
+      THW2buV7ADUYivX7ofCvBu5T6YngbPZNIxDB4mh7cEal/UDtxV683A/5RL4wIYvt
+      S5SVemmu6Yb8GkGwLGmMVLYXutuaHdMFyKzWm+qFlG5JRz4okUWERvtJ2QAJPOzL
+      mAG1ceyBFowj/r3iJTa+Jcif2uAmZxg+cHkZG5KzATykF82UH1ojUzREMMDcPJi2
+      dQIDAQAB
+      -----END PUBLIC KEY-----
   - path: /etc/cvmfs/keys/galaxyproject.org/data.galaxyproject.org.pub
     key: |
       -----BEGIN PUBLIC KEY-----
@@ -250,6 +261,12 @@ galaxy_cvmfs_repositories:
     key_dir: /etc/cvmfs/keys/galaxyproject.org
     server_options:
       - CVMFS_AUTO_GC=false
+    client_options: []
+  - repository: idc.galaxyproject.org
+    stratum0: cvmfs0-psu0.galaxyproject.org
+    owner: "{{ cvmfs_repo_owner | default('root') }}"
+    key_dir: /etc/cvmfs/keys/galaxyproject.org
+    server_options: []
     client_options: []
   - repository: refgenomes-databio.galaxyproject.org
     stratum0: cvmfs0-psu0.galaxyproject.org
